@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link rel="shortcut icon" href="ico/favicon.ico">
+
+        <title>REST APP</title>
+        <link rel="stylesheet" href="webjars/bootstrap/3.3.6/css/bootstrap.min.css"/>  
+        <link rel="stylesheet" href="webjars/bootstrap-material-design/0.3.0/css/material.min.css"/>  
+        <link rel="stylesheet" href="webjars/bootstrap-material-design/0.3.0/css/ripples.min.css"/> 
+        <link rel="stylesheet" href="webjars/bootstrap-material-design/0.3.0/css/roboto.min.css"/> 
+       	<link rel="stylesheet" href="components/angular-ui-grid/ui-grid.css" />
+        <link rel="stylesheet" href="css/main.css" />
+		<link rel="stylesheet" href="components/font-awesome-4.6.3/css/font-awesome.min.css"></link>
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+                      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+                      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+                    <![endif]-->
+                    
+
+    </head>
+
+    <body ng-cloak>
+    
+		<div class="container-wrapper" ng-controller="MainController as ctrl">
+	        <!-- Fixed navbar -->
+	        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	            <div class="container">
+	                <div class="navbar-header">
+	                    <button type="button" class="navbar-toggle" data-toggle="collapse"
+	                            data-target=".navbar-collapse">
+	                        <span class="sr-only">Toggle navigation</span> <span
+	                            class="icon-bar"></span> <span class="icon-bar"></span> <span
+	                            class="icon-bar"></span>
+	                    </button>
+	                    <a class="navbar-brand" href="/home" translate>appName</a>
+	                </div>
+	                <div class="navbar-collapse collapse">
+	                    <ul class="nav navbar-nav" ng-show="authenticated">
+	                        <li role="button" ng-class="ctrl.activeWhen(ctrl.path() == '/siteManage')"><a
+	                                ng-click="ctrl.go('siteManage')">场地管理</a></li>
+	                    </ul>
+	                    <span class="navbar-right" ng-if="!authenticated">
+	                        <a class="btn btn-success navbar-btn" ng-click="ctrl.login()" translate>login</a>
+	                    </span>
+	                    <span class="navbar-right" ng-if="!!authenticated">
+	                        <span class="navbar-text"> 
+	                            欢迎  {{userName}}, 
+	                        </span> 
+	                        <a class="btn btn-primary navbar-btn" href='javascript:void(0);' ng-click="ctrl.logout()" translate>logout</a>
+	                    </span> 
+	                </div>
+	                <!--/.nav-collapse -->
+	            </div>
+	        </div>
+	        <div class="container page">
+	            <div ng-class="'alert alert-' + getMessage().type"
+	                 ng-show="getMessage().show">
+	                <button type="button" class="close" ng-click="getMessage().show = false">×</button>
+	                {{getMessage().text | translate }}
+	            </div>
+	         	<div ui-view="maincontent"></div>
+	         	<div ui-view="preinitcontent"></div>
+	        </div>
+	        <footer>
+	            <div class="container">
+	                <div class="row">
+	                    <div class="col-md-12">
+	                        <div class="btn-group btn-group-sm">
+	                            <a class="btn btn-default"
+	                               ng-class="(ctrl.getLanguage() == 'zh_CN') ? 'btn-primary' : ''"
+	                               ng-click="ctrl.setLanguage('zh_CN')">简体中文</a> <a
+	                               class="btn btn-default"
+	                               ng-class="(ctrl.getLanguage() == 'en') ? 'btn-primary' : ''"
+	                               ng-click="ctrl.setLanguage('en')">English</a>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="row">
+	                    <div class="col-md-12">
+	                        <div class="center-block">&copy;2017 allencao.com, all
+	                            rights reserved.</div>
+	                    </div>
+	                </div>
+	            </div>
+	        </footer>
+        </div>
+	<!-- component: js -->
+	<script src="components/jquery/dist/jquery.js"></script>
+	<script src="components/jquery-ui/jquery-ui.js"></script>
+	
+	<!-- 
+	<script src="components/jquery.coverflow.js"></script>
+	<script src="components/jquery.interpolate.js"></script>
+	 -->
+	<script src="components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="components/angular/angular.min.js"></script>
+	<script src="components/angular-resource/angular-resource.min.js"></script>
+	<script src="components/angular-ui-router/angular-ui-router.min.js"></script>
+	<script src="components/angular-bootstrap/ui-bootstrap.min.js"></script>
+	<script src="components/angular-bootstrap/ui-bootstrap-tpls-1.3.3.min.js"></script>
+	
+	<script src="components/angular-sanitize/angular-sanitize.js"></script>
+	<script src="components/angular-translate/angular-translate.min.js"></script>
+	<script src="components/angular-translate/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
+	<script src="components/angular-ui-grid/ui-grid.min.js"></script>
+	<script src="components/angular-ui-mask/mask.min.js"></script>
+	<script src="components/xml2json/xml2json.min.js"></script>
+	<script src="components/math/math.min.js"></script>
+	<script src="components/angular-websocket/angular-websocket.min.js"></script>
+	<script src="components/angular-loading-overlay/angular-loading-overlay.js"></script>
+	<script src="components/angular-file-upload/angular-file-upload.min.js"></script>
+	<!-- app: js -->
+	<script src="app/app.js"></script>
+	<script src="app/common/base64.js"></script>
+	<script src="app/common/fileModel.directive.js"></script>
+	<script src="app/utils/utils.js"></script>
+	<script src="app/utils/appInitialization.service.js"></script>
+	<script src="app/utils/userSession.service.js"></script>
+	<script src="app/utils/config.service.js"></script>
+	<script src="app/utils/fileReader.service.js"></script>
+	<script src="app/login/login.js"></script>
+	<script src="app/login/login.service.js"></script>
+	<script src="app/login/login.controller.js"></script>
+	<script src="app/home/home.controller.js"></script>
+	<script src="app/main/main.js"></script>
+	<script src="app/main/main.controller.js"></script>
+	
+	<!-- business module -->
+	
+	<script src="app/sitemanage/site.js"></script>
+	<script src="app/sitemanage/site.service.js"></script>
+	<script src="app/sitemanage/site.controller.js"></script>
+	<script src="app/sitemanage/addSite.controller.js"></script>
+	
+	<script src="app/appbootstrap.js"></script>
+    </body>
+
+</html>
+

@@ -1,0 +1,47 @@
+<div class="panel-group" role="tablist" aria-multiselectable="true">
+	<div class="panel panel-default" role="tab">
+		<div class="panel-heading">
+			<h2 class="panel-title " translate>site.manage.title</h2>
+		</div>
+		<div class="panel-body">			
+			<div class="row">
+				<div class="col-sm-12 col-xs-12">
+                    <div class="form-group">
+                        <label class="control-label col-md-1" for="siteName" translate>site.name</label>
+                        <div class="col-md-4">
+                            <input class="form-control" id="siteName" ng-model="ctrl.search.siteName" />
+                        </div>
+                        <label class="control-label col-md-1" for="district" translate>site.address.district</label>
+                        <div class="col-md-4">
+                            <input class="form-control" id="district" ng-model="ctrl.search.district" />
+                        </div>
+                    </div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-md-12 btn-toolbar">
+					<button class="btn btn-primary pull-right" id="reset" type="button" ng-click="ctrl.rest();" translate>rest</button>
+					<button class="btn btn-danger pull-right" id="search" type="button" ng-click="ctrl.search();" translate>search</button>
+				</div>
+			</div>
+		</div>
+		<div class="panel-heading">
+			<h2 class="panel-title "></h2>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-sm-12 col-xs-12">
+					<div ui-grid="ctrl.gridOptions" ui-grid-save-state ui-grid-selection ui-grid-auto-resize ui-grid-pagination ui-grid-gridfooter></div>
+				</div>
+			</div>
+		</div>
+		<div class="panel-footer">
+			<div class="row">
+				<div class="col-xs-12 col-md-12 btn-toolbar">
+					<button class="btn btn-primary pull-right" id="cancel" type="button" ng-click="ctrl.cancel();" translate>cancel</button>
+					<button class="btn btn-primary pull-right" id="cancel" type="button" ng-click="ctrl.add();" translate>add</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

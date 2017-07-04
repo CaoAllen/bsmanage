@@ -1,0 +1,15 @@
+<xml>
+	<appid>wxab2fb32c8ddd48b8</appid>
+	<body>测试</body>
+	<mch_id>1481779342</mch_id>
+	<nonce_str>692ON0EDDSFKZBNKYB84FC0520HSA0W3</nonce_str>
+	<notify_url>http://localhost:8080/BSManageAdmin/api/wx/payment/notify
+	</notify_url>
+	<openid>obsX90JYBSQ_JsDURyUKyTB9xshg</openid>
+	<out_trade_no>20150806125346</out_trade_no>
+	<sign_type>MD5</sign_type>
+	<spbill_create_ip>123.12.12.123</spbill_create_ip>
+	<total_fee>1</total_fee>
+	<trade_type>JSAPI</trade_type>
+	<sign>1FE493E1F90DDAC204C01429BC14A9B2</sign>
+</xml>

@@ -1,0 +1,219 @@
+<div class="panel-group" role="tablist" aria-multiselectable="true">
+	<div class="panel panel-default" role="tab">
+		<div class="panel-heading">
+			<h2 class="panel-title " translate>site.add.title</h2>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-sm-12 col-xs-12">
+	                <form class="form form-horizontal" ng-if="ctrl.stage === 1">
+	                    <div class="form-group">
+	                        <label class="control-label col-md-1" for="name" translate>site.name</label>
+	                        <div class="col-md-5">
+	                            <input class="form-control" id="name" ng-model="ctrl.site.name" />
+	                        </div>
+	                    </div>
+	                    <div class="form-group">
+	                    	<label class="control-label col-md-1" for="type" translate>site.type</label>
+	                        <div class="col-md-2">
+	                            <input class="form-control" id="type" ng-model="ctrl.site.type" />
+	                        </div>
+	                        <label class="control-label col-md-1" for="flowrate" translate>site.flowrate</label>
+	                        <div class="col-md-2">
+	                            <input class="form-control" id="flowrate" ng-model="ctrl.site.flowrate" />
+	                        </div>
+	                        <label class="control-label col-md-1" for="totalarea" translate>site.totalarea</label>
+	                        <div class="col-md-2">
+	                            <input class="form-control" id="totalarea" ng-model="ctrl.site.totalArea" />
+	                        </div>
+	                    </div>
+	                    <hr>
+	                    <div class="form-group ">
+	                        <label class="control-label col-md-1" for="city" translate>site.address.city</label>
+	                        <div class="col-md-2">
+	                            <input class="form-control" id="city" ng-model="ctrl.site.address.city" />
+	                        </div>
+	                        <label class="control-label col-md-1" for="district" translate>site.address.district</label>
+	                        <div class="col-md-2">
+	                            <input class="form-control" id="district" ng-model="ctrl.site.address.district" />
+	                        </div>
+	                        <label class="control-label col-md-1" for="detail" translate>site.address.addressdetail</label>
+	                        <div class="col-md-5">
+	                            <input class="form-control" id="detail" ng-model="ctrl.site.address.addressDetail" />
+	                        </div>
+	                    </div>
+	                    <div class="form-group ">
+	                        <label class="control-label col-md-1" for="longitude" translate>site.address.longitude</label>
+	                        <div class="col-md-2">
+	                            <input class="form-control" id="longitude" ng-model="ctrl.site.address.longitude" />
+	                        </div>
+	                        <label class="control-label col-md-1" for="latitude" translate>site.address.latitude</label>
+	                        <div class="col-md-2">
+	                            <input class="form-control" id="latitude" ng-model="ctrl.site.address.latitude" />
+	                        </div>
+	                    </div>
+	                    <hr>
+	                    <div class="form-group ">
+	                        <label class="control-label col-md-1" for="stallposition" translate>site.stallposition</label>
+	                        <div class="col-md-2">
+	                            <input class="form-control"  id="stallposition" ng-model="ctrl.site.stallPosition" />
+	                        </div>
+	                        <label class="control-label col-md-1" for="stalltimestart" translate>site.stalltimestart</label>
+	                        <div class="col-md-2">
+	                           <div id="stalltimestart" uib-timepicker ng-model="ctrl.site.stallTimeStart" show-spinners="false" hour-step="1" minute-step="15" show-meridian="false"></div>
+	                        </div>
+	                        <label class="control-label col-md-1" for="stalltimeend" translate>site.stalltimeend</label>
+	                        <div class="col-md-2">
+	                           <div id="stalltimeend" uib-timepicker ng-model="ctrl.site.stallTimeEnd" show-spinners="false" hour-step="1" minute-step="15" show-meridian="false"></div>
+	                        </div>
+	                        <label class="control-label col-md-1" for="stallsize" translate>site.stallsize</label>
+	                        <div class="col-md-2">
+	                            <input class="form-control" id="stallsize" ng-model="ctrl.site.stallSize" />
+	                        </div>
+	                    </div>
+	                    <div class="form-group ">
+	                        <label class="control-label col-md-1" for="propertyreq" translate>site.propertyreq</label>
+	                        <div class="col-md-8">
+	                            <input class="form-control" id="propertyreq" ng-model="ctrl.site.propertyReq" />
+	                        </div>
+	                    </div>
+	                    <div class="form-group ">
+	                        <label class="control-label col-md-1" for="prohibitegoods" translate>site.prohibitegoods</label>
+	                        <div class="col-md-8">
+	                            <input class="form-control" id="prohibitegoods" ng-model="ctrl.site.prohibiteGoods" />
+	                        </div>
+	                    </div>
+	                    <div class="form-group ">
+	                        <label class="control-label col-md-1" for="history" translate>site.history</label>
+	                        <div class="col-md-8">
+	                            <input class="form-control" id="history" ng-model="ctrl.site.history" />
+	                        </div>
+	                    </div>
+	                    <div class="form-group ">
+	                        <label class="control-label col-md-1" for="supportingfacilities" translate>site.supportingfacilities</label>
+	                        <div class="col-md-8">
+	                            <input class="form-control" id="supportingfacilities" ng-model="ctrl.site.supportingFacilities" />
+	                        </div>
+	                    </div>
+	                    <div class="form-group ">
+	                        <label class="control-label col-md-1" for="sitedetails" translate>site.sitedetails</label>
+	                        <div class="col-md-8">
+	                            <input class="form-control" id="sitedetails" ng-model="ctrl.site.siteDetails" />
+	                        </div>
+	                    </div>
+	                    <div class="form-group ">
+	                        <label class="control-label col-md-1" for="agestructure" translate>site.agestructure</label>
+	                        <div class="col-md-2">
+	                            <input class="form-control" id="agestructure" ng-model="ctrl.site.ageStructure" />
+	                        </div>
+	                        <label class="control-label col-md-1" for="malevsfemale" translate>site.malevsfemale</label>
+	                        <div class="col-md-2">
+	                            <input class="form-control" id="malevsfemale" ng-model="ctrl.site.maleVsFemale" />
+	                        </div>
+	                        <label class="control-label col-md-1" for="consumption" translate>site.consumption</label>
+	                        <div class="col-md-2">
+	                            <input class="form-control" id="consumption" ng-model="ctrl.site.consumption" />
+	                        </div>
+	                        <label class="control-label col-md-1" for="userparticipation" translate>site.userparticipation</label>
+	                        <div class="col-md-2">
+	                            <input class="form-control" id="userparticipation" ng-model="ctrl.site.userParticipation" />
+	                        </div>
+	                    </div>
+	                </form>
+	                
+	                <form class="form form-horizontal"  ng-if="ctrl.stage === 2">
+	                	<p translate>site.community.title</p>
+	                	<hr>
+	                    <div class="form-group">
+	                        <label class="control-label col-md-1" for="year" translate>site.community.year</label>
+	                        <div class="col-md-2">
+	                            <input class="form-control" id="year" ng-model="ctrl.site.community.year" />
+	                        </div>
+	                        <label class="control-label col-md-1" for="propertyfee" translate>site.community.propertyfee</label>
+	                        <div class="col-md-2">
+	                            <input class="form-control" id="propertyfee" ng-model="ctrl.site.community.propertyfee" />
+	                        </div>
+	                        <label class="control-label col-md-1" for="housingprice" translate>site.community.housingprice</label>
+	                        <div class="col-md-2">
+	                            <input class="form-control" id="housingprice" ng-model="ctrl.site.community.housingprice" />
+	                        </div>
+	                        <label class="control-label col-md-1" for="households" translate>site.community.households</label>
+	                        <div class="col-md-2">
+	                            <input class="form-control" id="households" ng-model="ctrl.site.community.households" />
+	                        </div>
+	                    </div>
+	                    <div class="form-group">
+	                        <label class="control-label col-md-1" for="occupancyrate" translate>site.community.occupancyrate</label>
+	                        <div class="col-md-2">
+	                            <input class="form-control" id="occupancyrate" ng-model="ctrl.site.community.occupancyrate" />
+	                        </div>
+	                    </div>
+                    </form>
+                    
+                	<form class="form form-horizontal"  ng-if="ctrl.stage === 3">
+	                	<p translate>site.price.title</p>
+	                	<hr>
+	                    <div class="form-group" ng-repeat="p in ctrl.prices">
+	                        <label class="control-label col-md-1" for="amount{{$index}}" translate>site.price.amount</label>
+	                        <div class="col-md-1">
+	                            <input class="form-control" type="number" id="amount{{$index}}" ng-model="p.amount" />
+	                        </div>
+	                        <label class="control-label col-md-1" for="stallsize{{$index}}" translate>site.price.stallsize</label>
+	                        <div class="col-md-2">
+	                            <input class="form-control" type="number" id="stallsize{{$index}}" ng-model="p.stallsize" />
+	                        </div>
+	                        <label class="control-label col-md-1" for="timeunit{{$index}}" translate>site.price.timeunit</label>
+	                        <div class="col-md-2">
+	                            <input class="form-control" type="number" id="timeunit{{$index}}" ng-model="p.timeunit" />
+	                        </div>
+	                        <label class="control-label col-md-1" for="specialcategory{{$index}}" translate>site.price.specialcategory</label>
+	                        <div class="col-md-2">
+	                            <input class="form-control" type="number" id="specialcategory{{$index}}" ng-model="p.specialcategory" />
+	                        </div>    
+	                        <div class="col-md-1">
+	                            <button  ng-if="$index > 0" class="btn btn-primary btn-sm" id="removeprice{{$index}}" type="button" ng-click="ctrl.removePrice($index);" ><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+	                        </div>   
+	                    </div>
+	                    <div class="form-group">
+             	            <div class="col-md-5">
+	                            <button class="btn btn-primary btn-sm" id="addprice" type="button" ng-click="ctrl.addPrice();" ><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+	                        </div>
+	                    </div>
+                    </form>
+                    
+                	<form class="form form-horizontal"  ng-if="ctrl.stage === 4">
+         		        <p translate>site.picture.title</h2>
+         		        <hr>
+	                    <div class="form-group">
+		                    <div class="col-md-12">
+<!-- 								<input type="file" name="file" accept="image/*" uploader="ctrl.uploader" ngf-max-size="2MB" ngf-model-invalid="errorFile"/> -->
+								<input type="file" name="file" accept="image/*" file-model="ctrl.myImg"/>
+		                    </div>
+	                    </div>
+	                    <div class="form-group">
+							<div class="col-md-4" ng-repeat="i in ctrl.images">
+								<div class="row">
+							    	<img ng-src="{{i.src}}" style="max-width:300px;max-height:300px;margin:0 10px;display:block;" />
+								</div>
+								<div class="row btn-toolbar">             	            
+	                            	<button class="btn btn-primary" id="uploadimg{{$index}}" type="button" ng-click="ctrl.uploadImg($index);" translate>{{i.uploadBtn}}</button>
+	                            	<button class="btn btn-primary" id="deleteimg{{$index}}" type="button" ng-click="ctrl.deleteImg($index);" translate>delete</button>
+								</div>
+							</div>
+	                    </div>
+                    </form>
+				</div>
+			</div>
+		</div>
+		<div class="panel-footer">
+			<div class="row">
+				<div class="col-xs-12 col-md-12 btn-toolbar">
+					<button class="btn btn-primary pull-right" id="cancel" type="button" ng-click="ctrl.cancel();" translate>cancel</button>
+					<button class="btn btn-primary pull-right" id="bacl" type="button" ng-click="ctrl.back();" ng-if="ctrl.stage > 1 && ctrl.stage < 4" translate>back</button>
+					<button class="btn btn-primary pull-right" id="next" type="button" ng-click="ctrl.next();" ng-if="ctrl.stage < 4" translate>next</button>
+					<button class="btn btn-primary pull-right" id="next" type="button" ng-click="ctrl.finish();" ng-if="ctrl.stage == 4" translate>finish</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

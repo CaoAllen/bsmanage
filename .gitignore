@@ -1,0 +1,13 @@
+/target/
+.settings/
+.classpath
+.project
+.idea/
+*.log*
+*.iml
+licenseheader.txt
+nb-configuration.xml
+*.bat
+/nbproject/
+/bin/
+/pom.xml--

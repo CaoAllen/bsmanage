@@ -1,5 +1,5 @@
 (function(){
-    angular.module('manageApp').factory('fileReader', ["$q", "$log", function($q, $log){
+    angular.module('manageApp.utils').factory('fileReader', ["$q", "$log", function($q, $log){
         var onLoad = function(reader, deferred, scope) {
             return function () {
                 scope.$apply(function () {

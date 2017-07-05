@@ -1,24 +1,35 @@
 (function(){
 	var as = angular.module('manageApp.site');
     as.controller('AddSiteController', AddSiteCtrl);
-    AddSiteCtrl.$inject = ['$scope','$state','$rootScope','$translate','fileReader','FileUploader','SiteSrvc','ConfigSrvc'];
-    function AddSiteCtrl($scope, $state, $rootScope, $translate, fileReader, FileUploader, SiteSrvc, ConfigSrvc) {
+    AddSiteCtrl.$inject = ['$scope','$state','$rootScope','fileReader','SiteSrvc','Utils','Msg'];
+    function AddSiteCtrl($scope, $state, $rootScope,fileReader, SiteSrvc, Utils, Msg) {
       var ctrl = this;
-      ctrl.stage = 1;
-      ctrl.startDate = new Date();
-      ctrl.cancel = cancel;
-      ctrl.next = next;
-      ctrl.back = back;
-      ctrl.finish = finish;
-      ctrl.addPrice = addPrice;
-      ctrl.removePrice = removePrice;
+      init();
       
-      ctrl.prices = [];
-      addPrice();
-      
-      ctrl.images = [];
-      ctrl.uploadImg = uploadImg;
-      ctrl.deleteImg = deleteImg;
+      function init(){
+          ctrl.stage = 1;
+          ctrl.maxYear = (new Date()).getFullYear();
+          ctrl.startDate = new Date();
+          ctrl.cancel = cancel;
+          ctrl.next = next;
+          ctrl.back = back;
+          ctrl.finish = finish;
+          ctrl.addPrice = addPrice;
+          ctrl.removePrice = removePrice;
+          ctrl.site = {
+    		  community:{}
+          };
+          ctrl.prices = [];
+          addPrice();
+          
+          ctrl.images = [];
+          ctrl.uploadImg = uploadImg;
+          ctrl.deleteImg = deleteImg;
+          
+          ctrl.cityList = [{'code':'上海市','desc':'上海市'},{'code':'北京市','desc':'北京市'}];
+          ctrl.cityChange = cityChange;
+      }
+
       
       $scope.getFile = function () {
           fileReader.readAsDataUrl(ctrl.myImg, $scope).then(function(result) {
@@ -39,38 +50,12 @@
           });
       };
       
-      function initUploader(){
-    	  ctrl.uploader = new FileUploader({
-        	  url: ConfigSrvc.getBaseUrl()+'/site/picture/uplad',
-        	  formData:[]
-          });
-    	  ctrl.uploader.onSuccessItem = function(fileItem, response, status,  headers) {             
-        	  console.dir(fileItem);              
-        	  console.dir(response);              
-        	  console.dir(status);              
-        	  console.dir(headers);   
-          };
-          ctrl.uploader.onAfterAddingFile = function(item){
-        	  console.log("onAfterAddingFile");
-        	  console.dir(item);   
-          }
-          ctrl.uploader.onWhenAddingFileFailed  = function(item, filter, options){
-        	  console.log("onWhenAddingFileFailed");
-        	  console.dir(item);   
-          }
-          ctrl.uploader. onBeforeUploadItem = function(item){
-        	  console.log("onBeforeUploadItem");
-        	  console.dir(item);   
-          }
-      }
-      
       function cancel(){
     	  $state.go("siteManage");
       }
       
       function next(){
-    	  ctrl.stage ++;
-    	  return;
+    	  Msg.clear();
     	  switch(ctrl.stage){
     	  	//add site
     	  	case 1: {
@@ -82,7 +67,7 @@
     	  			SiteSrvc.addSite(ctrl.site).then(function(res){
         	  			if(res.siteId > 0){
         	  				ctrl.site.id = res.siteId;
-        	  				$rootScope.setMessage({text:'add success!', type:'success', show:true});
+        	  				Msg.show('add success!','S',true);
         	  				ctrl.stage ++;
         	  			}
         	  		},function(error){
@@ -92,7 +77,7 @@
     	  			SiteSrvc.updateSite(ctrl.site).then(function(res){
         	  			if(res.data){
         	  				ctrl.stage ++;
-        	  				$rootScope.setMessage({text:'update success!', type:'success', show:true});
+        	  				Msg.show('update success!','S',true);
         	  			}
         	  		},function(error){
         	  			console.dir(error);
@@ -102,40 +87,75 @@
     	  	};
     	  	//add community
     	  	case 2: {
+    	  		ctrl.site.community.siteId = ctrl.site.id;
 	  			SiteSrvc.addCommunity(ctrl.site.community).then(function(res){
-    	  			if(res.siteId > 0){
-    	  				ctrl.site.id = res.siteId;
-    	  				$rootScope.setMessage({text:'add success!', type:'success', show:true});
+    	  			if(res.status){
+    	  				Msg.show('add success!','S',true);
     	  				ctrl.stage ++;
+    	  			}else {
+    	  				Msg.show('add failed!','D',true);
     	  			}
     	  		},function(error){
     	  			console.dir(error);
     	  		});
+    	  		break;
     	  	};
     	  	//add price
     	  	case 3: {
-    	  		ctrl.stage ++;
+    	  		SiteSrvc.addPrice(ctrl.prices, ctrl.site.id).then(function(res){
+	  				Msg.show('价格添加成功!','S',true);
+        	  		ctrl.stage ++;
+    	  		},function(error){
+    	  			console.dir(error);
+    	  		});
+    	  		break;
     	  	};
     	  }
       }
       
       function finish(){
+    	  if(ctrl.images.length === 0){
+    		  Msg.show('请至少上传一张图片！','W',true);
+    		  return;
+    	  }
     	  var continued = true;
     	  angular.forEach(ctrl.images,function(item,index){
-    		  if(continued && item.isUploaded){
+    		  if(continued && !item.isUploaded){
     			  continued = false;
     		  }
     	  });
-    	  if(continued){
-    		  $rootScope.setMessage({text:'site setup success!', type:'success', show:true});
-    		  $state.go("siteManage");
+    	  if(ctrl.images.length > 0 && continued){
+    		  SiteSrvc.finishSite(ctrl.site.id).then(function(res){
+    			  if(res.status){
+    	        	  Msg.showModal('','场地新建成功！').result.then(function(code) {
+    	  				if(code == 'ok'){
+    	    	    		  $state.go("siteManage");
+    	  				}
+					  });
+    			  }else{
+    				  Msg.show('site setup failed!','D',true);
+    			  }
+    		  },function(error){
+  	  			console.dir(error);
+    		  });
     	  }else{
-    		  $rootScope.setMessage({text:'please upload or delete pending picture!', type:'warning', show:true});
+    		  Msg.show('please upload or delete pending picture!','W',true);
     		  return;
     	  }
       }
       
       function validateSite(){
+    	  if(!ctrl.site){
+    		  return false;
+    	  }
+    	  if(Utils.isTrimEmpty(ctrl.site.name)){
+    		  Msg.show('场地名不能为空','W',true);
+    		  return false;
+    	  }
+    	  if(Utils.isNumberEmpty(ctrl.site.flowrate)){
+    		  Msg.show('人流量不能为空','W',true);
+    		  return false;
+    	  }
     	  return true;
       }
       
@@ -163,27 +183,43 @@
     	  SiteSrvc.uploadPicture(ctrl.images[i].data).then(function(res){
     		  console.dir(res);
     		  if(res.data && res.data.status){
-    			  $rootScope.setMessage({text:'Upload succesfully!', type:'success', show:true});
+        		  Msg.show('Upload succesfully!','S',true);
     	    	  ctrl.images[i].uploadBtn = 'site.picture.uploaded';
-    	    	  ctrl.images[i].pictureId = res.data.picture.pictureId;
+    	    	  ctrl.images[i].pictureId = res.data.object.pictureId;
+    	    	  ctrl.images[i].isUploaded = true;
     		  }else {
-    			  $rootScope.setMessage({text:'Upload failed!', type:'danger', show:true});
+        		  Msg.show('Upload failed!','D',true);
     	    	  ctrl.images[i].uploadBtn = 'site.picture.upload';
     		  }
     	  },function(error){
     		  console.dir(error);
-			  $rootScope.setMessage({text:'Upload failed!', type:'danger', show:true});
+    		  Msg.show('Upload failed!','D',true);
 	    	  ctrl.images[i].uploadBtn = 'site.picture.upload';
     	  });
       }
 
       function deleteImg(i){
+    	  var pictureId = ctrl.images[i].pictureId;
+    	  if(pictureId){
+        	  SiteSrvc.deletePicture(pictureId).then(function(res){
+        		  if(res.data && res.data.status){
+            		  Msg.show('delete succesfully!','S',true);
+        		  }
+        	  });
+    	  }
     	  ctrl.images.splice(i, 1);
-    	  SiteSrvc.deletePicture(ctrl.images[i].pictureId).then(function(res){
-    		  if(res.data && res.data.status){
-    			  $rootScope.setMessage({text:'delete succesfully!', type:'success', show:true});
-    		  }
-    	  });
+      }
+      
+      
+      function cityChange(){
+    	  switch(ctrl.site.address.city){
+	    	  case '北京市': 
+	        	  ctrl.districtList = [{'code':'昌平区','desc':'昌平区'},{'code':'海淀区','desc':'海淀区'}];
+	        	  break;
+	    	  case '上海市': 
+	        	  ctrl.districtList = [{'code':'静安区','desc':'静安区'},{'code':'黄浦区','desc':'黄浦区'}];
+	        	  break;
+    	  }
       }
     }
 })();

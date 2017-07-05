@@ -2,6 +2,10 @@ body {
     padding-top: 70px;
 }
 
+input .number{
+	text-align:right;
+}
+
 .page{
     min-height: 400px;
 }

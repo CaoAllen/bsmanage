@@ -11,8 +11,7 @@
        'ngSanitize',
        'pascalprecht.translate',
        'ngWebSocket',
-       'bsLoadingOverlay',
-       'angularFileUpload'
+       'bsLoadingOverlay'
      ]).run(['$rootScope','$location','$state','$stateParams','$window','$q','$http', runFun
      ]).config(['$stateProvider','$urlRouterProvider','$resourceProvider','$translateProvider', '$httpProvider','$rootScopeProvider',configFun
      ]).filter('trusted', ['$sce', function ($sce) {

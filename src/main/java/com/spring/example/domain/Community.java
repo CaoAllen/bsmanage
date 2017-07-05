@@ -19,7 +19,7 @@ import javax.persistence.TemporalType;
  *
  */
 @Entity
-@Table(name = "communtiy")
+@Table(name = "community")
 public class Community implements Serializable{
 
 	/**
@@ -39,7 +39,7 @@ public class Community implements Serializable{
 	private int year;
 	
 	@Column(name = "property_fee")
-	private BigDecimal propertyFee;
+	private int propertyFee;
 
 	@Column(name = "housing_price")
 	private int housingPrice;
@@ -88,11 +88,11 @@ public class Community implements Serializable{
 		this.year = year;
 	}
 
-	public BigDecimal getPropertyFee() {
+	public int getPropertyFee() {
 		return propertyFee;
 	}
 
-	public void setPropertyFee(BigDecimal propertyFee) {
+	public void setPropertyFee(int propertyFee) {
 		this.propertyFee = propertyFee;
 	}
 

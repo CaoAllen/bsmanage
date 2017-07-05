@@ -131,18 +131,34 @@ public class SiteServiceImpl implements SiteSerivce{
 		return null;
 	}
 
-	public boolean updateSite(SiteForm sf) {
+	public boolean updateSite(SiteForm sf) throws Exception{
 		Site site = siteRepository.findOne(sf.getId());
 		if(site == null){
 			throw new ResourceNotFoundException(sf.getId());
 		}
 		site = populateSite(site, sf);
 
-		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		site.setUpdateTime(new Date());
-		site.setUpdateUser(userDetails.getUsername());
+		site.setUpdateUser(ContextUtil.getUserName());
+		Site result = siteRepository.save(site);
+		if(result != null){
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean finishSite(Long siteId) throws Exception{
+		Site site = siteRepository.findOne(siteId);
+		if(site == null){
+			throw new ResourceNotFoundException(siteId);
+		}
+		site.setUpdateTime(new Date());
+		site.setUpdateUser(ContextUtil.getUserName());
 		site.setStatus(SiteStatus.F.toString());
-		
+		Site result = siteRepository.save(site);
+		if(result != null){
+			return true;
+		}
 		return false;
 	}
 	
@@ -171,6 +187,11 @@ public class SiteServiceImpl implements SiteSerivce{
 	}
 
 	public Community saveCommunity(Community community) throws SQLException{
+		Date currentDate = new Date();
+		community.setCreateTime(currentDate);
+		community.setCreateUser(ContextUtil.getUserName());
+		community.setUpdateTime(currentDate);
+		community.setUpdateUser(ContextUtil.getUserName());
 		community = communityRepository.save(community);
 		return community;
 	}
@@ -180,6 +201,19 @@ public class SiteServiceImpl implements SiteSerivce{
 		return price;
 	}
 
+	public List<Price> savePrices(List<Price> prices, Long siteId) throws Exception{
+		for (Price price : prices) {
+			price.setSiteId(siteId);
+			Date currentDate = new Date();
+			price.setCreateTime(currentDate);
+			price.setCreateUser(ContextUtil.getUserName());
+			price.setUpdateTime(currentDate);
+			price.setUpdateUser(ContextUtil.getUserName());
+		}
+		List<Price> result = priceRepository.save(prices);
+		return result;
+	}
+	
 	public Picture uploadPicture(MultipartFile uploadFile, Long siteId) throws Exception{
 		String fileName = uploadFile.getOriginalFilename();
 		String suffix = "." + fileName.substring(fileName.lastIndexOf(".") + 1);
@@ -189,7 +223,7 @@ public class SiteServiceImpl implements SiteSerivce{
 //   	 		ServletContext sc = wac.getServletContext();
 //   	 		String root = System.getProperty("catalina.base");
    	 		//store img file into dist
-   	 		File uploadDir = new File(Config.IMG_BasePath + "\\site");
+   	 		File uploadDir = new File(Config.IMG_SITEPATH);
    	 		if (!uploadDir.exists()) {
    	 			uploadDir.mkdir();
    	 		}
@@ -212,5 +246,17 @@ public class SiteServiceImpl implements SiteSerivce{
    	 		e.printStackTrace();
    	 	}
 		return null;
+	}
+
+	public void deletePicutre(Long pictureId) throws Exception{
+		Picture picture = pictureRepository.findOne(pictureId);
+		if(picture != null){
+			String imgName = picture.getPath().split("\\/")[1];
+			File imgFile = new File(Config.IMG_SITEPATH + "\\" + imgName);
+			if(imgFile.exists()){
+				imgFile.delete();
+			}
+			pictureRepository.delete(pictureId);
+		}
 	}
 }

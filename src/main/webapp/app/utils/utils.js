@@ -1,1 +1,1 @@
-angular.module('manageApp.utils', []);
+angular.module('manageApp.utils', ['ngLocale']);

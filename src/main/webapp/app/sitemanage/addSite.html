@@ -10,7 +10,7 @@
 	                    <div class="form-group">
 	                        <label class="control-label col-md-1" for="name" translate>site.name</label>
 	                        <div class="col-md-5">
-	                            <input class="form-control" id="name" ng-model="ctrl.site.name" />
+	                            <input class="form-control" id="name" ng-model="ctrl.site.name"/>
 	                        </div>
 	                    </div>
 	                    <div class="form-group">
@@ -20,22 +20,31 @@
 	                        </div>
 	                        <label class="control-label col-md-1" for="flowrate" translate>site.flowrate</label>
 	                        <div class="col-md-2">
-	                            <input class="form-control" id="flowrate" ng-model="ctrl.site.flowrate" />
+	                            <input type="number" min=0 class="form-control" id="flowrate" ng-model="ctrl.site.flowrate" />
 	                        </div>
 	                        <label class="control-label col-md-1" for="totalarea" translate>site.totalarea</label>
 	                        <div class="col-md-2">
-	                            <input class="form-control" id="totalarea" ng-model="ctrl.site.totalArea" />
+	                            <input type="number" min=0 class="form-control" id="totalarea" ng-model="ctrl.site.totalArea"/>
 	                        </div>
 	                    </div>
 	                    <hr>
 	                    <div class="form-group ">
 	                        <label class="control-label col-md-1" for="city" translate>site.address.city</label>
 	                        <div class="col-md-2">
-	                            <input class="form-control" id="city" ng-model="ctrl.site.address.city" />
+                        		<select id="city"
+									name="city" type="text" class="form-control"
+									ng-model="ctrl.site.address.city"
+									ng-change="ctrl.cityChange()"
+									ng-options="t.code as t.desc for t in ctrl.cityList">
+								</select>
 	                        </div>
 	                        <label class="control-label col-md-1" for="district" translate>site.address.district</label>
 	                        <div class="col-md-2">
-	                            <input class="form-control" id="district" ng-model="ctrl.site.address.district" />
+                        		<select id="district"
+									name="district" type="text" class="form-control"
+									ng-model="ctrl.site.address.district"
+									ng-options="t.code as t.desc for t in ctrl.districtList">
+								</select>
 	                        </div>
 	                        <label class="control-label col-md-1" for="detail" translate>site.address.addressdetail</label>
 	                        <div class="col-md-5">
@@ -127,25 +136,25 @@
 	                    <div class="form-group">
 	                        <label class="control-label col-md-1" for="year" translate>site.community.year</label>
 	                        <div class="col-md-2">
-	                            <input class="form-control" id="year" ng-model="ctrl.site.community.year" />
+	                            <input type="number" min=1995 max={{ctrl.maxYear}} class="form-control" id="year" ng-model="ctrl.site.community.year" />
 	                        </div>
 	                        <label class="control-label col-md-1" for="propertyfee" translate>site.community.propertyfee</label>
 	                        <div class="col-md-2">
-	                            <input class="form-control" id="propertyfee" ng-model="ctrl.site.community.propertyfee" />
+	                            <input type="number" min=0 class="form-control" id="propertyfee" ng-model="ctrl.site.community.propertyfee" />
 	                        </div>
 	                        <label class="control-label col-md-1" for="housingprice" translate>site.community.housingprice</label>
 	                        <div class="col-md-2">
-	                            <input class="form-control" id="housingprice" ng-model="ctrl.site.community.housingprice" />
+	                            <input  type="number" min=0 class="form-control" id="housingprice" ng-model="ctrl.site.community.housingprice" />
 	                        </div>
 	                        <label class="control-label col-md-1" for="households" translate>site.community.households</label>
 	                        <div class="col-md-2">
-	                            <input class="form-control" id="households" ng-model="ctrl.site.community.households" />
+	                            <input type="number" min=0 class="form-control" id="households" ng-model="ctrl.site.community.households" />
 	                        </div>
 	                    </div>
 	                    <div class="form-group">
 	                        <label class="control-label col-md-1" for="occupancyrate" translate>site.community.occupancyrate</label>
 	                        <div class="col-md-2">
-	                            <input class="form-control" id="occupancyrate" ng-model="ctrl.site.community.occupancyrate" />
+	                            <input type="number" min=0 max=100 class="form-control" id="occupancyrate" ng-model="ctrl.site.community.occupancyrate" />
 	                        </div>
 	                    </div>
                     </form>
@@ -156,22 +165,22 @@
 	                    <div class="form-group" ng-repeat="p in ctrl.prices">
 	                        <label class="control-label col-md-1" for="amount{{$index}}" translate>site.price.amount</label>
 	                        <div class="col-md-1">
-	                            <input class="form-control" type="number" id="amount{{$index}}" ng-model="p.amount" />
+	                            <input class="form-control" type="number" min=0 id="amount{{$index}}" ng-model="p.amount" />
 	                        </div>
 	                        <label class="control-label col-md-1" for="stallsize{{$index}}" translate>site.price.stallsize</label>
 	                        <div class="col-md-2">
-	                            <input class="form-control" type="number" id="stallsize{{$index}}" ng-model="p.stallsize" />
+	                            <input class="form-control" id="stallsize{{$index}}" ng-model="p.stallSize" />
 	                        </div>
 	                        <label class="control-label col-md-1" for="timeunit{{$index}}" translate>site.price.timeunit</label>
 	                        <div class="col-md-2">
-	                            <input class="form-control" type="number" id="timeunit{{$index}}" ng-model="p.timeunit" />
+	                            <input class="form-control" id="timeunit{{$index}}" ng-model="p.timeUnit" />
 	                        </div>
 	                        <label class="control-label col-md-1" for="specialcategory{{$index}}" translate>site.price.specialcategory</label>
 	                        <div class="col-md-2">
-	                            <input class="form-control" type="number" id="specialcategory{{$index}}" ng-model="p.specialcategory" />
+	                            <input class="form-control" id="specialcategory{{$index}}" ng-model="p.specialCategory" />
 	                        </div>    
 	                        <div class="col-md-1">
-	                            <button  ng-if="$index > 0" class="btn btn-primary btn-sm" id="removeprice{{$index}}" type="button" ng-click="ctrl.removePrice($index);" ><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+	                            <button ng-if="$index > 0" class="btn btn-primary btn-sm" id="removeprice{{$index}}" type="button" ng-click="ctrl.removePrice($index);" ><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
 	                        </div>   
 	                    </div>
 	                    <div class="form-group">

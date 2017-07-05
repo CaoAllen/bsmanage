@@ -4,12 +4,17 @@ import java.io.File;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jettison.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -109,10 +114,33 @@ public class SiteController {
         if(sf.getId() > 0){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        boolean updated = siteService.updateSite(sf);
-        if(updated){
-        	return new ResponseEntity<>(HttpStatus.OK);
-        }
+        boolean updated;
+		try {
+			updated = siteService.updateSite(sf);
+	        if(updated){
+	        	return new ResponseEntity<>(HttpStatus.OK);
+	        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @RequestMapping(value = "/finish", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<Result> finishSite(@RequestParam("siteId") Long siteId){
+	    if(!(siteId > 0)){
+	    	return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	    }
+        boolean updated;
+		try {
+			updated = siteService.finishSite(siteId);
+	        if(updated){
+	        	return new ResponseEntity<>(new Result(true), HttpStatus.OK);
+	        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
     
@@ -142,24 +170,27 @@ public class SiteController {
     
     @RequestMapping(value = "/price/add", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<Result> addPrice(@RequestBody @Valid Price price, BindingResult errResult){
-	    if(!(price.getSiteId() > 0)){
+    public ResponseEntity<Result> addPrice(@RequestParam("prices") String prices, @RequestParam("siteId") Long siteId){
+	    if(!(siteId > 0)){
 	    	return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	    }
-        log.debug("add price for site, siteId:" + price.getSiteId());
-        if (errResult.hasErrors()) {
-            throw new InvalidRequestException(errResult);
-        }
-        log.debug(price.toString());
+        log.debug("add price for site, siteId:" + siteId);
+        log.debug(prices.toString());
+        ObjectMapper mapper = new ObjectMapper();
 		try {
-			Price p = siteService.savePrice(price);
-	        log.debug("new id: "+p.getPriceId());
-	        if(p != null && p.getPriceId() > 0){
+			JSONArray jsonArray = new JSONArray(prices);
+			List<Price> priceList = new ArrayList<>();
+			for (int i =0; i < jsonArray.length(); i++) {
+				Price price = mapper.readValue(jsonArray.getJSONObject(i).toString(), Price.class);
+				priceList.add(price);
+			}
+			List<Price> result = siteService.savePrices(priceList,siteId);
+	        if(result != null && result.size() > 0){
 	        	return new ResponseEntity<>(new Result(true), HttpStatus.CREATED);
 	        }
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.debug("save community exception happen: " + e);
+			log.debug("save price exception happen: " + e);
 		}
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -176,7 +207,20 @@ public class SiteController {
 	        }
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.debug("save community exception happen: " + e);
+			log.debug("upload picture exception happen: " + e);
+		}
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    
+    @RequestMapping(value = "/picture/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<Result> deletePicture(@RequestParam("pictureId") Long pictureId){
+		try {
+			siteService.deletePicutre(pictureId);
+        	return new ResponseEntity<>(new Result(true), HttpStatus.CREATED);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.debug("delete picture exception happen: " + e);
 		}
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }

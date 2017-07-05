@@ -6,6 +6,7 @@
     			getSites:getSites,
     			addSite:addSite,
     			updateSite:updateSite,
+    			finishSite:finishSite,
     			addCommunity:addCommunity,
     			updateCommunity:updateCommunity,
     			addPrice:addPrice,
@@ -61,6 +62,24 @@
 	    	return resource.updateSite(siteForm).$promise;
     	}
     	
+    	function finishSite(siteId){
+    		var data = new FormData();
+    		data.append('siteId', siteId);
+	    	var resource = $resource(ConfigSrvc.getBaseUrl()+'/site/finish', {}, {
+	    		finishSite : {
+					method : 'POST',
+		            transformRequest: angular.identity,
+		            headers: {
+		                'Content-Type': undefined
+		            },
+					params : {
+					},
+					isArray : false
+				}
+			});
+	    	return resource.finishSite(data).$promise;
+    	}
+    	
     	function addCommunity(community){
 	    	var resource = $resource(ConfigSrvc.getBaseUrl()+'/site/community/add', {}, {
 	    		addCommunity : {
@@ -85,16 +104,23 @@
 	    	return resource.updateCommunity(community).$promise;
     	}
 		
-    	function addPrice(price){
+    	function addPrice(prices,siteId){
+    		var data = new FormData();
+    		data.append('prices',angular.toJson(prices));
+    		data.append('siteId',siteId);
 	    	var resource = $resource(ConfigSrvc.getBaseUrl()+'/site/price/add', {}, {
 	    		addPrice : {
 					method : 'POST',
+		            transformRequest: angular.identity,
+		            headers: {
+		                'Content-Type': undefined
+		            },
 					params : {
 					},
 					isArray : false
 				}
 			});
-	    	return resource.addPrice(price).$promise;
+	    	return resource.addPrice(data).$promise;
     	}
     	
 		function deletePrice(id){
@@ -119,16 +145,20 @@
 	          });
 		}
 		
-		function deletePicture(siteId){
+		function deletePicture(pictureId){
+    		var data = new FormData();
+    		data.append('pictureId',pictureId);
 	    	var resource = $resource(ConfigSrvc.getBaseUrl()+'/site/picture/delete', {}, {
 	    		deletePicture : {
 					method : 'POST',
+		            headers: {'Content-Type':undefined},
+		            transformRequest: angular.identity,
 					params : {
 					},
 					isArray : false
 				}
 			});
-	    	return resource.deletePicture({'siteId':siteId}).$promise;
+	    	return resource.deletePicture(data).$promise;
 		}
     }
     

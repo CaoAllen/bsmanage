@@ -1,7 +1,8 @@
 package com.spring.example.config;
 
 public class Config {
-	public final static String IMG_BasePath = "E:\\work folder\\bsImgResource";
+	public final static String IMG_BASEPATH = "E:\\work folder\\bsImgResource";
+	public final static String IMG_SITEPATH = "E:\\work folder\\bsImgResource\\site";
 	//** use from wechat**//
 	public final static String APP_ID = "wxab2fb32c8ddd48b8";
 	public final static String APP_SECRET = "7934f1d256e72213061cf601b71f1dd1";

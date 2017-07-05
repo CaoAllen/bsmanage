@@ -23,11 +23,17 @@ public interface SiteSerivce {
 	
 	public Site saveSite(SiteForm fm) throws Exception;
 	
+	public boolean updateSite(SiteForm sf) throws Exception;
+	
 	public List<SiteItem> queryAllSites(String name, Pageable pageable) throws SQLException;
 	
-	Community saveCommunity(Community community) throws SQLException;
+	public Community saveCommunity(Community community) throws SQLException;
 	
-	Price savePrice(Price price) throws Exception;
+	public Price savePrice(Price price) throws Exception;
 	
-	Picture uploadPicture(MultipartFile uploadFile, Long siteId) throws Exception;
+	public List<Price> savePrices(List<Price> prices, Long siteId) throws Exception;
+	
+	public Picture uploadPicture(MultipartFile uploadFile, Long siteId) throws Exception;
+	
+	public void deletePicutre(Long pictureId) throws Exception;
 }

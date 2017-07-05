@@ -1,0 +1,21 @@
+<div class="modal-content">
+	<div class="modal-header no-border">
+		<button id="info-modal-close" type="button" class="close" ng-click="ctrl.close"
+			ng-if="ctrl.closeable">{{ctrl.closeMark}}</button>
+		<h4>
+			<i class="fa fa-lg {{ctrl.titleClass}}"></i>
+			<span translate>{{ctrl.title}}</span>
+		</h4>
+	</div>
+	<div class="modal-body" ng-if="ctrl.content">
+		<div class="row">
+			<div class="col-sm-12 col-xs-12">
+				<p ng-bind-html="ctrl.content | translate" translate></p>
+			</div>
+ 
+		</div>
+	</div>
+	<div class="modal-footer no-border">
+		<button ng-repeat="b in ctrl.buttons" id="modal-button-{{b.code}}" ng-click="ctrl.click(b.code)" class="btn btn-primary pull-right btn-mar-left model-footer-btn" translate>{{b.text}}</button>
+	</div>
+</div>

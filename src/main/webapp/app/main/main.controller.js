@@ -1,8 +1,8 @@
 (function(){
 	angular.module('manageApp.main').controller('MainController', MainCtrl);    
-    MainCtrl.$inject = ['$q','$scope','$rootScope','$location','$translate','$state','ConfigSrvc', 'LoginSrvc'];
+    MainCtrl.$inject = ['$q','$scope','$rootScope','$location','$translate','$state','ConfigSrvc', 'LoginSrvc','AppInitSrvc'];
     
-    function MainCtrl($q, $scope, $rootScope, $location, $translate, $state, ConfigSrvc, LoginSrvc) {
+    function MainCtrl($q, $scope, $rootScope, $location, $translate, $state, ConfigSrvc, LoginSrvc, AppInitSrvc) {
     	var ctrl = this;
     	ctrl.go = go;
         var load = function () {
@@ -56,8 +56,10 @@
         	LoginSrvc.loadServiceContext().then(function(res){
         		if(res.data.username){
         			$rootScope.authenticated = true;
-        			$rootScope.initalLoad = true;
         			$rootScope.userName = res.data.username;
+        			AppInitSrvc.appInit().then(function(){
+            			$rootScope.initalLoad = true;
+        			});
         		}
         	},function(error){
     			$rootScope.authenticated = false;

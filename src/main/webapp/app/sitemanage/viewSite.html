@@ -1,14 +1,14 @@
 <div class="panel-group" role="tablist" aria-multiselectable="true">
 	<div class="panel panel-default" role="tab">
 		<div class="panel-heading">
-			<h2 class="panel-title " translate>site.add.title</h2>
+			<h2 class="panel-title " translate>site.view.title</h2>
 		</div>
 		<div ng-include="'app/sitemanage/siteDetail.html'"></div>
 		<div class="panel-footer">
 			<div class="row">
 				<div class="col-xs-12 col-md-12 btn-toolbar">
 					<button class="btn btn-primary pull-right" id="cancel" type="button" ng-click="ctrl.cancel();" translate>cancel</button>
-					<button class="btn btn-primary pull-right" id="bacl" type="button" ng-click="ctrl.back();" ng-if="ctrl.stage > 1 && ctrl.stage < 4" translate>back</button>
+					<button class="btn btn-primary pull-right" id="bacl" type="button" ng-click="ctrl.back();" ng-if="ctrl.stage > 1" translate>back</button>
 					<button class="btn btn-primary pull-right" id="next" type="button" ng-click="ctrl.next();" ng-if="ctrl.stage < 4" translate>next</button>
 					<button class="btn btn-primary pull-right" id="next" type="button" ng-click="ctrl.finish();" ng-if="ctrl.stage == 4" translate>finish</button>
 				</div>

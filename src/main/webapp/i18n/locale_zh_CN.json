@@ -10,6 +10,7 @@
 	"save":"\u4fdd\u5b58",
 	"add":"\u65b0\u589e",
 	"cancel":"\u53d6\u6d88",
+	"rest":"\u91cd\u7f6e",
 	"changePassword":"\u4fee\u6539\u5bc6\u7801",
 	"updateProfile":"\u66f4\u65b0\u4e2a\u4eba\u8d44\u6599",
 	"oldPassword":"\u5f53\u524d\u5bc6\u7801",
@@ -63,6 +64,12 @@
 		"add":{
 			"title":"\u573a\u5730\u7ba1\u7406 - \u65b0\u589e"
 		},
+		"edit":{
+			"title":"\u573a\u5730\u7ba1\u7406 - \u4fee\u6539"
+		},
+		"view":{
+			"title":"\u573a\u5730\u7ba1\u7406 - \u67e5\u770b"
+		},
 		"name":"\u573a\u5730\u540d",
 		"type":"\u7c7b\u578b",
 		"stallsize":"\u6446\u644a\u5927\u5c0f",
@@ -89,7 +96,7 @@
 			"latitude":"\u7ef4\u5ea6"
 		},
 		"community":{
-			"title":"\u8bf7\u5f55\u5165\u793e\u533a\u4fe1\u606f",
+			"title":"\u793e\u533a\u4fe1\u606f",
 			"year":"\u5e74\u4efd",
 			"propertyfee":"\u7269\u4e1a\u8d39",
 			"housingprice":"\u623f\u4ef7",
@@ -97,14 +104,14 @@
 			"occupancyrate":"\u5165\u4f4f\u7387"
 		},
 		"price":{
-			"title":"\u8bf7\u5f55\u5165\u4ef7\u683c",
+			"title":"\u4ef7\u683c\u4fe1\u606f",
 			"amount":"\u91d1\u989d",
 			"stallsize":"\u644a\u4f4d\u5927\u5c0f",
 			"timeunit":"\u65f6\u95f4\u5355\u4f4d",
 			"specialcategory":"\u7279\u6b8a\u54c1\u7c7b"
 		},
 		"picture":{
-			"title":"\u8bf7\u4e0a\u4f20\u56fe\u7247",
+			"title":"\u56fe\u7247\u4fe1\u606f",
 			"upload":"\u0020\u4e0a\u4f20",
 			"uploading":"\u0020\u4e0a\u4f20\u4e2d...",
 			"uploaded":"\u5df2\u4e0a\u4f20",

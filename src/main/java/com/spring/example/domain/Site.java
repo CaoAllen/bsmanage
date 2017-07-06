@@ -109,16 +109,16 @@ public class Site implements Serializable {
     @Column(name = "update_user",nullable = false,length = 20)
 	private String updateUser;
     
-    @OneToMany(targetEntity= Picture.class,mappedBy="site",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
-    private Set<Picture> pictures = new HashSet<Picture>();
-
-	public Set<Picture> getPictures() {
-		return pictures;
-	}
-
-	public void setPictures(Set<Picture> pictures) {
-		this.pictures = pictures;
-	}
+//    @OneToMany(targetEntity= Picture.class,mappedBy="site",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+//    private Set<Picture> pictures = new HashSet<Picture>();
+//
+//	public Set<Picture> getPictures() {
+//		return pictures;
+//	}
+//
+//	public void setPictures(Set<Picture> pictures) {
+//		this.pictures = pictures;
+//	}
 
 	public Long getSiteId() {
 		return siteId;
@@ -313,7 +313,7 @@ public class Site implements Serializable {
 				+ supportingFacilities + ", userParticipation=" + userParticipation + ", maleVsFemale=" + maleVsFemale
 				+ ", ageStructure=" + ageStructure + ", consumption=" + consumption + ", siteDetails=" + siteDetails
 				+ ", status=" + status + ", createTime=" + createTime + ", createUser=" + createUser + ", updateTime="
-				+ updateTime + ", updateUser=" + updateUser + ", pictures=" + pictures + "]";
+				+ updateTime + ", updateUser=" + updateUser + "]";
 	}
 	
 }

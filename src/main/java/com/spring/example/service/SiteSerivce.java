@@ -13,6 +13,7 @@ import com.spring.example.domain.Community;
 import com.spring.example.domain.Picture;
 import com.spring.example.domain.Price;
 import com.spring.example.domain.Site;
+import com.spring.example.model.SiteDetails;
 import com.spring.example.model.SiteForm;
 import com.spring.example.model.SiteItem;
 import com.spring.example.model.WXSiteItem;
@@ -22,6 +23,8 @@ public interface SiteSerivce {
 	public List<WXSiteItem> searchSites(String city, String name, BigDecimal priceLow, BigDecimal priceHigh, String siteType, Pageable page);
 	
 	public Site saveSite(SiteForm fm) throws Exception;
+	
+	public SiteDetails getSite(Long siteId) throws Exception;
 	
 	public boolean updateSite(SiteForm sf) throws Exception;
 	

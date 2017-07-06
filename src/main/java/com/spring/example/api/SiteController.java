@@ -40,6 +40,7 @@ import com.spring.example.domain.Result;
 import com.spring.example.domain.Site;
 import com.spring.example.exception.InvalidRequestException;
 import com.spring.example.model.ResponseMessage;
+import com.spring.example.model.SiteDetails;
 import com.spring.example.model.SiteForm;
 import com.spring.example.model.SiteItem;
 import com.spring.example.model.WXSiteItem;
@@ -102,6 +103,24 @@ public class SiteController {
 		}
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @RequestMapping(value = "/get", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<SiteDetails> getSite(@RequestParam("siteId") Long siteId){
+    	if(!(siteId > 0)){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+		try {
+			SiteDetails details = siteService.getSite(siteId);
+	        if(details != null){
+	        	return new ResponseEntity<>(details, HttpStatus.OK);
+	        }
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.debug("get site exception happen: " + e);
+		}
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 	
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
@@ -111,7 +130,7 @@ public class SiteController {
             throw new InvalidRequestException(errResult);
         }
         log.debug(sf.toString());
-        if(sf.getId() > 0){
+        if(!(sf.getId() > 0)){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         boolean updated;

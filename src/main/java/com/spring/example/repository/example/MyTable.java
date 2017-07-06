@@ -20,6 +20,10 @@ import javax.persistence.Table;
                 @StoredProcedureParameter(mode = ParameterMode.OUT, name = "outParam1", type = String.class) }) })
 public class MyTable implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	private Long id;
 

@@ -26,7 +26,7 @@ import com.spring.example.config.DataJpaConfig;
 import com.spring.example.config.DataSourceConfig;
 import com.spring.example.config.JpaConfig;
 import com.spring.example.domain.Site;
-import com.spring.example.domain.SiteDetails;
+import com.spring.example.model.SiteDetails;
 import com.spring.example.model.SiteItem;
 import com.spring.example.model.WXSiteItem;
 import com.spring.example.repository.SiteRepository;

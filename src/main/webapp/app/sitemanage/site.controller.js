@@ -5,6 +5,8 @@
     function SiteManageCtrl($scope, $state, $rootScope, $http, $location, $translate, rowSorter, uiGridConstants,SiteSrvc) {
       var ctrl = this;
       ctrl.add = add;
+      ctrl.goDetail = goDetail;
+      ctrl.goEdit = goEdit;
       gridInit();
       loadData();
       
@@ -40,21 +42,39 @@
 					externalSort:ctrl.sortByColumn
 			};
 			
-			ctrl.cellTemplate = "<div class=\"ui-grid-cell-contents\" title=\"TOOLTIP\" ng-click=\"grid.appScope.openDetail(row);\">{{COL_FIELD CUSTOM_FILTERS}}</div>";
+			ctrl.showStatus = function(status){
+				if(status == 'F'){
+					return "完成";
+				}
+				return "未完成";
+			}
+
+			ctrl.isFinish = function(status){
+				return status == 'F';
+			}
+			var actionCellTemplate = "<div class=\"ui-grid-cell-contents \" style=\"text-align: center\" title=\"TOOLTIP\">" +
+					"<a href='javascript:void(0)' ng-click=\"grid.appScope.goEdit(row.entity.siteId);\"><i class='glyphicon glyphicon-edit'></i></a></div>";
+			var nameCellTemplate = "<div class=\"ui-grid-cell-contents\" title=\"TOOLTIP\"><a href='javascript:void(0)'  ng-click=\"grid.appScope.goDetail(row.entity.siteId);\">{{COL_FIELD CUSTOM_FILTERS}}</a></div>";
+			var statusCellTemplate = "<div class=\"ui-grid-cell-contents\" title=\"TOOLTIP\"><span style=\"{{grid.appScope.isFinish(row.entity.status)?'':'color:red'}}\">{{grid.appScope.showStatus(row.entity.status)}}</span></div>";
 			
 			var twoStateSortDirectionCycle=[uiGridConstants.ASC, uiGridConstants.DESC];
 			
-			
-			ctrl.gridOptions.columnDefs = [  
+			ctrl.gridOptions.columnDefs = [{
+	        	field: 'action', 
+	        	displayName:'操作',
+	        	headerCellFilter:'translate',
+	        	cellTemplate: actionCellTemplate,
+     			width:'*'
+			},  
 			{
 	        	field: 'name', 
 	        	displayName:'场地名',
 	        	headerCellFilter:'translate',
-	        	cellTemplate:ctrl.cellTemplate,
+	        	cellTemplate: nameCellTemplate,
 	        	sortDirectionCycle: twoStateSortDirectionCycle,
      			width:'***'
 			},{
-	        	field: 'price', 
+	        	field: 'amount', 
 	        	displayName:'价格',
 	        	headerCellFilter:'translate',
 	        	sortDirectionCycle: twoStateSortDirectionCycle,
@@ -72,10 +92,11 @@
 	        	sortDirectionCycle: twoStateSortDirectionCycle,
      			width:'***'
 			},{
-	        	field: 'status', 
+	        	field: 'statusName', 
 	        	displayName:'状态',
 	        	headerCellFilter:'translate',
 	        	sortDirectionCycle: twoStateSortDirectionCycle,
+	        	cellTemplate: statusCellTemplate,
      			width:'**'
 			}];
 		
@@ -86,7 +107,12 @@
       
       function loadData(){
     	  SiteSrvc.getSites().then(function(data){
-    		  ctrl.gridOptions.data = data; 
+    		  ctrl.gridOptions.data = data;
+    		  angular.forEach(ctrl.gridOptions.data,function(item,index){
+    			  if(item.status == 'F'){
+	    			 item.statusName = '完成';
+    			  }else item.statusName = '未完成';
+    		  });
     	  },function(error){
     		 console.dir(error); 
     	  });
@@ -94,6 +120,14 @@
       
       function add(){
     	  $state.go('siteManage.add');
+      }
+      
+      function goDetail(siteId){
+    	  $state.go('siteManage.view',{'siteId':siteId});
+      }
+      
+      function goEdit(siteId){
+    	  $state.go('siteManage.edit',{'siteId':siteId});
       }
     }
 })();

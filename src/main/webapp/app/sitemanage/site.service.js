@@ -1,9 +1,10 @@
 (function() {
     angular.module('manageApp.site').factory('SiteSrvc', SiteSrvc);
-    SiteSrvc.$inject = ['$rootScope','$q','$resource','$http','$window','ConfigSrvc'];
-    function SiteSrvc($rootScope,$q,$resource,$http,$window,ConfigSrvc){
+    SiteSrvc.$inject = ['$rootScope','$q','$resource','$http','$window','ConfigSrvc','Msg','Utils'];
+    function SiteSrvc($rootScope,$q,$resource,$http,$window,ConfigSrvc,Msg,Utils){
     	var service = {
     			getSites:getSites,
+    			getSite:getSite,
     			addSite:addSite,
     			updateSite:updateSite,
     			finishSite:finishSite,
@@ -12,7 +13,9 @@
     			addPrice:addPrice,
     			deletePrice:deletePrice,
     			uploadPicture:uploadPicture,
-    			deletePicture:deletePicture
+    			deletePicture:deletePicture,
+    			commonValidateSite:commonValidateSite,
+    			getDistricts:getDistricts
     	};
     	return service;
     	
@@ -36,6 +39,24 @@
 				}
 			});
 	    	return resource.getSites().$promise;
+    	}
+    	
+    	function getSite(siteId){
+    		var data = new FormData();
+    		data.append('siteId', siteId);
+	    	var resource = $resource(ConfigSrvc.getBaseUrl()+'/site/get', {}, {
+	    		getSite : {
+					method : 'POST',
+		            transformRequest: angular.identity,
+		            headers: {
+		                'Content-Type': undefined
+		            },
+					params : {
+					},
+					isArray : false
+				}
+			});
+	    	return resource.getSite(data).$promise;
     	}
     	
     	function addSite(siteForm){
@@ -159,6 +180,48 @@
 				}
 			});
 	    	return resource.deletePicture(data).$promise;
+		}
+		
+		function commonValidateSite(site){
+			if(Utils.isTrimEmpty(site.name)){
+				Msg.show('场地名不能为空','W',true);
+				return false;
+      	  	}
+      	  	if(Utils.isNumberEmpty(site.flowrate)){
+      	  		Msg.show('人流量不能为空','W',true);
+      	  		return false;
+      	  	}
+      	  	if(site.address == null){
+      	  		Msg.show('地址不能为空','W',true);
+      	  		return false;
+      	  	}
+      	  	if(Utils.isTrimEmpty(site.address.city)){
+      	  		Msg.show('城市不能为空','W',true);
+      	  		return false;
+      	  	}
+      	  	if(Utils.isTrimEmpty(site.address.district)){
+      	  		Msg.show('地区不能为空','W',true);
+      	  		return false;
+      	  	}
+      	  	if(Utils.isTrimEmpty(site.address.addressDetail)){
+      	  		Msg.show('详细地址不能为空','W',true);
+      	  		return false;
+      	  	}
+      	  	//TODO more
+      	  	return true;
+		}
+		
+		function getDistricts(){
+			var districts = ["黄浦区","徐汇区","长宁区","静安区","普陀区","虹口区","杨浦区","闵行区","宝山区","嘉定区","浦东新区","金山区","松江区","青浦区","奉贤区"];
+			var result = [];
+			angular.forEach(districts,function(item,index){
+				result.push(createDistrict(item));
+			});
+			return result;
+		}
+		
+		function createDistrict(name){
+			return {'desc':name,'code':name};
 		}
     }
     

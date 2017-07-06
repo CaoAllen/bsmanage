@@ -2,8 +2,8 @@ package com.spring.example.repository.example;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.spring.example.domain.SiteDetails;
+import com.spring.example.model.SiteDetails;
 
-public interface MyTableRepository extends CrudRepository<SiteDetails, Long>, MyTableRepositoryCustom{
+public interface MyTableRepository extends CrudRepository<MyTable, Long>, MyTableRepositoryCustom{
 
 }

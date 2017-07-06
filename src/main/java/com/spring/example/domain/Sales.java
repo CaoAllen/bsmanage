@@ -3,42 +3,36 @@ package com.spring.example.domain;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-/**
- * 
- * @author acao
- *
- */
-@Entity(name = "picture")
-@Table(name = "picture")
-public class Picture implements Serializable{
+@Entity
+@Table(name = "sales")
+public class Sales implements Serializable{
 
-	/**
+    /**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	@Id
+	@Id()
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "picture_id")
-	private Long pictureId;
+    @Column(name = "sales_id")
+	private Long salesId;
 	
     @Column(name = "site_id")
 	private Long siteId;
 
-    @Column(name = "path")
-	private String path;
+    @Column(name = "sales_volumn")
+    private Long salesVolumn;
+
+    @Column(name = "score")
+    private int score;
     
     @Column(name = "create_time",nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -53,25 +47,13 @@ public class Picture implements Serializable{
 
     @Column(name = "update_user",nullable = false,length = 20)
 	private String updateUser;
-    
-//    @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH})
-//    @JoinColumn(name="site_id", referencedColumnName="site_id", insertable=false, updatable=false)
-//    private Site site;
-//
-//	public Site getSite() {
-//		return site;
-//	}
-//
-//	public void setSite(Site site) {
-//		this.site = site;
-//	}
 
-	public Long getPictureId() {
-		return pictureId;
+	public Long getSalesId() {
+		return salesId;
 	}
 
-	public void setPictureId(Long pictureId) {
-		this.pictureId = pictureId;
+	public void setSalesId(Long salesId) {
+		this.salesId = salesId;
 	}
 
 	public Long getSiteId() {
@@ -82,12 +64,20 @@ public class Picture implements Serializable{
 		this.siteId = siteId;
 	}
 
-	public String getPath() {
-		return path;
+	public Long getSalesVolumn() {
+		return salesVolumn;
 	}
 
-	public void setPath(String path) {
-		this.path = path;
+	public void setSalesVolumn(Long salesVolumn) {
+		this.salesVolumn = salesVolumn;
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
 	}
 
 	public Date getCreateTime() {
@@ -120,6 +110,13 @@ public class Picture implements Serializable{
 
 	public void setUpdateUser(String updateUser) {
 		this.updateUser = updateUser;
+	}
+
+	@Override
+	public String toString() {
+		return "Sales [salesId=" + salesId + ", siteId=" + siteId + ", salesVolumn=" + salesVolumn + ", score=" + score
+				+ ", createTime=" + createTime + ", createUser=" + createUser + ", updateTime=" + updateTime
+				+ ", updateUser=" + updateUser + "]";
 	}
     
 }

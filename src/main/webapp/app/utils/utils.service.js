@@ -7,7 +7,8 @@
 				noLessThanZero: noLessThanZero,
 				isGreaterThanZero: isGreaterThanZero,
 				translate: translate,
-				translateMsg: translateMsg
+				translateMsg: translateMsg,
+				reFormatDate: reFormatDate
 				
 		};
 
@@ -41,6 +42,18 @@
 		function isGreaterThanZero(num){
 			if(isNumberEmpty(num)) return false;
 			return Number(num) > 0 ;
+		}
+		
+		function reFormatDate(dateStr){
+			if(!isStringEmpty(dateStr) && dateStr.split(":").length > 2){
+				var newDate = new Date();
+				var hours = dateStr.split(":")[0];
+				var minutes = dateStr.split(":")[1];
+				newDate.setHours(hours);
+				newDate.setMinutes(minutes);
+				return newDate;
+			}
+			return null;
 		}
 	});
 })();

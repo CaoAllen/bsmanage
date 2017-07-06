@@ -1,3 +1,5 @@
+DROP PROCEDURE IF EXISTS `bs_site_add`;
+
 CREATE PROCEDURE bs_site_add (
 	IN name VARCHAR(100), 
 	IN stall_size VARCHAR(20), 

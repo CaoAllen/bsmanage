@@ -7,6 +7,7 @@
     	};
     	var service = {
     			getBaseUrl:getBaseUrl,
+    			getImgUrl:getImgUrl,
     			setLanguage:setLanguage,
     			getLanguage:getLanguage
     	};
@@ -14,11 +15,17 @@
     	return service;
     	
     	function getBaseUrl(){
-//    		var urlConfig = angular.injector(["ng"]).get('externalConfig');
     		if(!urlConfig || !urlConfig.baseUrl){
     			alert("not config base url!");
     		}
     		return urlConfig.baseUrl;
+    	}
+    	
+    	function getImgUrl(){
+    		if(!urlConfig || !urlConfig.imgUrl){
+    			alert("not config image url!");
+    		}
+    		return urlConfig.imgUrl;
     	}
     	
     	function getLanguage(){

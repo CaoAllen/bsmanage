@@ -784,7 +784,7 @@
                 <jdbc.username>root</jdbc.username>
                 <jdbc.password>lp62</jdbc.password>
 
-                <log4j.level>INFO</log4j.level>
+                <log4j.level>DEBUG</log4j.level>
 
                 <spring.profiles.active>staging</spring.profiles.active>
 

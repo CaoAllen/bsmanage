@@ -10,12 +10,14 @@
           ctrl.stage = 1;
           ctrl.maxYear = (new Date()).getFullYear();
           ctrl.startDate = new Date();
+          
           ctrl.cancel = cancel;
           ctrl.next = next;
           ctrl.back = back;
           ctrl.finish = finish;
           ctrl.addPrice = addPrice;
           ctrl.removePrice = removePrice;
+          
           ctrl.site = {
     		  community:{}
           };
@@ -148,14 +150,9 @@
     	  if(!ctrl.site){
     		  return false;
     	  }
-    	  if(Utils.isTrimEmpty(ctrl.site.name)){
-    		  Msg.show('场地名不能为空','W',true);
-    		  return false;
-    	  }
-    	  if(Utils.isNumberEmpty(ctrl.site.flowrate)){
-    		  Msg.show('人流量不能为空','W',true);
-    		  return false;
-    	  }
+      	  if(!SiteSrvc.commonValidateSite(ctrl.site)){
+      		  return false;
+      	  }
     	  return true;
       }
       
@@ -217,7 +214,7 @@
 	        	  ctrl.districtList = [{'code':'昌平区','desc':'昌平区'},{'code':'海淀区','desc':'海淀区'}];
 	        	  break;
 	    	  case '上海市': 
-	        	  ctrl.districtList = [{'code':'静安区','desc':'静安区'},{'code':'黄浦区','desc':'黄浦区'}];
+	        	  ctrl.districtList = SiteSrvc.getDistricts();
 	        	  break;
     	  }
       }

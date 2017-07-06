@@ -1,6 +1,7 @@
 package com.spring.example.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 public class SiteItem implements Serializable{
@@ -17,6 +18,9 @@ public class SiteItem implements Serializable{
 	private String siteType;
 	private String status;
 	private String addressDetail;
+	private BigInteger salesVolumn;
+	private BigDecimal amount;
+	
 	public BigInteger getSiteId() {
 		return siteId;
 	}
@@ -52,6 +56,18 @@ public class SiteItem implements Serializable{
 	}
 	public void setAddressDetail(String addressDetail) {
 		this.addressDetail = addressDetail;
+	}
+	public BigInteger getSalesVolumn() {
+		return salesVolumn;
+	}
+	public void setSalesVolumn(BigInteger salesVolumn) {
+		this.salesVolumn = salesVolumn;
+	}
+	public BigDecimal getAmount() {
+		return amount;
+	}
+	public void setAmount(BigDecimal amount) {
+		this.amount = amount;
 	}
 	
 }

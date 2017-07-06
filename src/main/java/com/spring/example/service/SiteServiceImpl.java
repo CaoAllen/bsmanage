@@ -31,6 +31,7 @@ import com.spring.example.domain.Picture;
 import com.spring.example.domain.Price;
 import com.spring.example.domain.Site;
 import com.spring.example.exception.ResourceNotFoundException;
+import com.spring.example.model.SiteDetails;
 import com.spring.example.model.SiteForm;
 import com.spring.example.model.SiteItem;
 import com.spring.example.model.WXSiteItem;
@@ -129,6 +130,32 @@ public class SiteServiceImpl implements SiteSerivce{
 			}
 		}
 		return null;
+	}
+	
+	public SiteDetails getSite(Long siteId) throws Exception{
+		SiteDetails result = new SiteDetails();
+		Site site = siteRepository.findOne(siteId);
+		if(site == null){
+			throw new ResourceNotFoundException(siteId);
+		}
+		result.setSite(site);
+		Address address = addressRepository.findBySiteId(siteId);
+		if(address != null){
+			result.setAddress(address);
+		}
+		Community community = communityRepository.findBySiteId(siteId);
+		if(community != null){
+			result.setCommunity(community);
+		}
+		List<Price> prices = priceRepository.findBySiteId(siteId);
+		if(prices != null){
+			result.setPrices(prices);
+		}
+		List<Picture> pictures = pictureRepository.findBySiteId(siteId);
+		if(pictures != null){
+			result.setPictures(pictures);
+		}
+		return result;
 	}
 
 	public boolean updateSite(SiteForm sf) throws Exception{

@@ -9,6 +9,7 @@
       function init(){
     	  if(!$stateParams.siteId || $stateParams.siteId == '@id'){
     		  $state.go("siteManage");
+    		  return;
     	  }
     	  ctrl.screenLock = true;
     	  ctrl.hideAddprice = true;

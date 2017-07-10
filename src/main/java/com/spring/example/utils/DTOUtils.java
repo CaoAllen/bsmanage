@@ -4,9 +4,12 @@ package com.spring.example.utils;
 import java.util.ArrayList;
 import java.util.List;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+
+import com.thoughtworks.xstream.io.json.JettisonStaxWriter;
 
 /**
  *
@@ -14,7 +17,7 @@ import org.springframework.data.domain.PageRequest;
  */
 public final class DTOUtils {
 
-    private static final ModelMapper INSTANCE = new ModelMapper();
+    private static ModelMapper INSTANCE = new ModelMapper();
     
     private DTOUtils() {
         throw new InstantiationError( "Must not instantiate this class" );
@@ -25,6 +28,15 @@ public final class DTOUtils {
     }
 
     public static <S, T> void mapTo(S source, T dist) {
+        INSTANCE.map(source, dist);
+    }
+
+    public static <S, T> void mapTo(S source, T dist, PropertyMap<S,T> propertyMap) {
+    	if(propertyMap != null){
+    		INSTANCE = new ModelMapper();
+            INSTANCE.addMappings(propertyMap);
+            INSTANCE.validate();
+    	}
         INSTANCE.map(source, dist);
     }
 

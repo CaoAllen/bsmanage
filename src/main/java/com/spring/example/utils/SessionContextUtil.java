@@ -3,9 +3,9 @@ package com.spring.example.utils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public class ContextUtil {
+public class SessionContextUtil {
 
-	private ContextUtil() {
+	private SessionContextUtil() {
 		throw new InstantiationError("Must not instantiate this class");
 	}
 	

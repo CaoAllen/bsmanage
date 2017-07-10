@@ -1,27 +1,25 @@
 package com.spring.example.service;
 
 import java.io.File;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 import javax.inject.Inject;
-import javax.servlet.ServletContext;
 
+import org.modelmapper.PropertyMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.ContextLoader;
-import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.example.config.Config;
@@ -40,7 +38,7 @@ import com.spring.example.repository.CommunityRepository;
 import com.spring.example.repository.PictureRepository;
 import com.spring.example.repository.PriceRepository;
 import com.spring.example.repository.SiteRepository;
-import com.spring.example.utils.ContextUtil;
+import com.spring.example.utils.SessionContextUtil;
 import com.spring.example.utils.DTOUtils;
 import com.spring.example.utils.SiteStatus;
 
@@ -109,23 +107,23 @@ public class SiteServiceImpl implements SiteSerivce{
 		}
 		Date currentDate = new Date();
 		site.setCreateTime(currentDate);
-		site.setCreateUser(ContextUtil.getUserName());
+		site.setCreateUser(SessionContextUtil.getUserName());
 		site.setUpdateTime(currentDate);
-		site.setUpdateUser(ContextUtil.getUserName());
+		site.setUpdateUser(SessionContextUtil.getUserName());
 		site.setStatus(SiteStatus.P.toString());
 		site = siteRepository.save(site);
-		if(site.getSiteId() > 0){
+		if(site.getSiteId() != null){
 			Address address = DTOUtils.map(sf.getAddress(), Address.class);
 			if(log.isDebugEnabled()){
 				log.debug(address.toString());
 			}
 			address.setSiteId(site.getSiteId());
 			address.setCreateTime(currentDate);
-			address.setCreateUser(ContextUtil.getUserName());
+			address.setCreateUser(SessionContextUtil.getUserName());
 			address.setUpdateTime(currentDate);
-			address.setUpdateUser(ContextUtil.getUserName());
+			address.setUpdateUser(SessionContextUtil.getUserName());
 			address = addressRepository.save(address);
-			if(address.getAddressId() > 0){
+			if(address.getAddressId() != null){
 				return site;
 			}
 		}
@@ -166,8 +164,20 @@ public class SiteServiceImpl implements SiteSerivce{
 		site = populateSite(site, sf);
 
 		site.setUpdateTime(new Date());
-		site.setUpdateUser(ContextUtil.getUserName());
+		site.setUpdateUser(SessionContextUtil.getUserName());
 		Site result = siteRepository.save(site);
+		
+		Address address = addressRepository.findBySiteId(sf.getId());
+		if(sf.getAddress() != null && address != null){
+			address.setCity(sf.getAddress().getCity());
+			address.setDistrict(sf.getAddress().getDistrict());
+			address.setAddressDetail(sf.getAddress().getAddressDetail());
+			address.setLatitude(sf.getAddress().getLatitude());
+			address.setLongitude(sf.getAddress().getLongitude());
+			address.setUpdateTime(new Date());
+			address.setUpdateUser(SessionContextUtil.getUserName());
+			addressRepository.save(address);
+		}
 		if(result != null){
 			return true;
 		}
@@ -180,7 +190,7 @@ public class SiteServiceImpl implements SiteSerivce{
 			throw new ResourceNotFoundException(siteId);
 		}
 		site.setUpdateTime(new Date());
-		site.setUpdateUser(ContextUtil.getUserName());
+		site.setUpdateUser(SessionContextUtil.getUserName());
 		site.setStatus(SiteStatus.F.toString());
 		Site result = siteRepository.save(site);
 		if(result != null){
@@ -216,11 +226,26 @@ public class SiteServiceImpl implements SiteSerivce{
 	public Community saveCommunity(Community community) throws SQLException{
 		Date currentDate = new Date();
 		community.setCreateTime(currentDate);
-		community.setCreateUser(ContextUtil.getUserName());
+		community.setCreateUser(SessionContextUtil.getUserName());
 		community.setUpdateTime(currentDate);
-		community.setUpdateUser(ContextUtil.getUserName());
+		community.setUpdateUser(SessionContextUtil.getUserName());
 		community = communityRepository.save(community);
 		return community;
+	}
+
+	public void updateCommunity(Community community) throws SQLException{
+		if(community.getCommunityId() != null && community.getCommunityId() > 0){
+			Community communityDB = communityRepository.findOne(community.getCommunityId());
+			if(communityDB == null){
+				throw new ResourceNotFoundException(community.getCommunityId());
+			}
+			DTOUtils.mapTo(community, communityDB);
+			communityDB.setUpdateTime(new Date());
+			communityDB.setUpdateUser(SessionContextUtil.getUserName());
+			communityRepository.save(communityDB);
+		}else{
+			saveCommunity(community);
+		}
 	}
 
 	public Price savePrice(Price price) throws Exception{
@@ -233,12 +258,63 @@ public class SiteServiceImpl implements SiteSerivce{
 			price.setSiteId(siteId);
 			Date currentDate = new Date();
 			price.setCreateTime(currentDate);
-			price.setCreateUser(ContextUtil.getUserName());
+			price.setCreateUser(SessionContextUtil.getUserName());
 			price.setUpdateTime(currentDate);
-			price.setUpdateUser(ContextUtil.getUserName());
+			price.setUpdateUser(SessionContextUtil.getUserName());
 		}
 		List<Price> result = priceRepository.save(prices);
 		return result;
+	}
+
+	public void updatePrices(List<Price> prices, Long siteId) throws Exception{
+		List<Price> pricesDB = priceRepository.findBySiteId(siteId);
+		if(pricesDB == null){
+			savePrices(prices, siteId);
+		}else{
+			List<Price> pricesUpdate = new ArrayList<>();
+			List<Price> pricesAdd = new ArrayList<>();
+			Map<Long, Price> map = new HashMap<>();//price need to update 
+			for (Price p1 : prices) {
+				if(p1.getSiteId() == null){
+					pricesAdd.add(p1);
+				}else{
+					for (Price p2 : pricesDB) {
+						if(p1.getPriceId() == p2.getPriceId()){
+							if(!map.containsKey(p2.getPriceId())){
+								map.put(p2.getPriceId(), p2);
+							}
+					        PropertyMap<Price,Price> propertyMap = new PropertyMap<Price, Price>() {
+					            @Override
+					            protected void configure() {
+					                skip(destination.getPriceId());
+					                skip(destination.getSiteId());
+					                skip(destination.getCreateTime());
+					                skip(destination.getCreateUser());
+					            }
+					        };
+							DTOUtils.mapTo(p1, p2, propertyMap);
+							p2.setUpdateTime(new Date());
+							p2.setUpdateUser(SessionContextUtil.getUserName());
+							pricesUpdate.add(p2);
+						}
+					}
+				}
+			}
+			if(pricesAdd.size() > 0){//price which need to add
+				savePrices(pricesAdd, siteId);
+			}
+			if(pricesUpdate.size() > 0){//price which need to update
+				priceRepository.save(pricesUpdate);
+			}
+			if(pricesDB.size() > 0){//price which need to delete
+				Predicate<Price> predicate = (s) -> map.containsKey(s.getPriceId());
+				boolean removed = pricesDB.removeIf(predicate);
+				if(removed){
+					priceRepository.delete(pricesDB);
+				}
+			}
+			
+		}
 	}
 	
 	public Picture uploadPicture(MultipartFile uploadFile, Long siteId) throws Exception{
@@ -263,9 +339,9 @@ public class SiteServiceImpl implements SiteSerivce{
    	 		picture.setPath("site" + "/" + imgFile);
    	 		Date currentDate = new Date();
    	 		picture.setCreateTime(currentDate);
-   	 		picture.setCreateUser(ContextUtil.getUserName());
+   	 		picture.setCreateUser(SessionContextUtil.getUserName());
    	 		picture.setUpdateTime(currentDate);
-   	 		picture.setUpdateUser(ContextUtil.getUserName());
+   	 		picture.setUpdateUser(SessionContextUtil.getUserName());
    	 		picture = pictureRepository.save(picture);
    	 		
    	 		return picture;

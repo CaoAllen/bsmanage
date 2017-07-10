@@ -107,7 +107,7 @@ public class SiteController {
     @RequestMapping(value = "/get", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<SiteDetails> getSite(@RequestParam("siteId") Long siteId){
-    	if(!(siteId > 0)){
+    	if(siteId == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 		try {
@@ -124,20 +124,20 @@ public class SiteController {
 	
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<Long> updateSite(@RequestBody @Valid SiteForm sf, BindingResult errResult){
+    public ResponseEntity<Result> updateSite(@RequestBody @Valid SiteForm sf, BindingResult errResult){
         log.debug("update site");
         if (errResult.hasErrors()) {
             throw new InvalidRequestException(errResult);
         }
         log.debug(sf.toString());
-        if(!(sf.getId() > 0)){
+        if(sf.getId() == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         boolean updated;
 		try {
 			updated = siteService.updateSite(sf);
 	        if(updated){
-	        	return new ResponseEntity<>(HttpStatus.OK);
+	        	return new ResponseEntity<>(new Result(true), HttpStatus.OK);
 	        }
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -148,7 +148,7 @@ public class SiteController {
     @RequestMapping(value = "/finish", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<Result> finishSite(@RequestParam("siteId") Long siteId){
-	    if(!(siteId > 0)){
+	    if(siteId == null){
 	    	return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	    }
         boolean updated;
@@ -166,7 +166,7 @@ public class SiteController {
     @RequestMapping(value = "/community/add", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<Result> addCommunity(@RequestBody @Valid Community community, BindingResult errResult){
-	    if(!(community.getSiteId() > 0)){
+	    if(community.getSiteId() == null){
 	    	return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	    }
         log.debug("add community for site, siteId:" + community.getSiteId());
@@ -187,10 +187,32 @@ public class SiteController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
     
+
+    @RequestMapping(value = "/community/update", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<Result> updateCommunity(@RequestBody @Valid Community community, BindingResult errResult){
+	    if(community.getSiteId() == null){
+	    	return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	    }
+        log.debug("update community for site, siteId:" + community.getSiteId());
+        if (errResult.hasErrors()) {
+            throw new InvalidRequestException(errResult);
+        }
+        log.debug(community.toString());
+		try {
+			siteService.updateCommunity(community);
+        	return new ResponseEntity<>(new Result(true), HttpStatus.CREATED);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.debug("save community exception happen: " + e);
+		}
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    
     @RequestMapping(value = "/price/add", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<Result> addPrice(@RequestParam("prices") String prices, @RequestParam("siteId") Long siteId){
-	    if(!(siteId > 0)){
+	    if(siteId == null){
 	    	return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	    }
         log.debug("add price for site, siteId:" + siteId);
@@ -207,6 +229,31 @@ public class SiteController {
 	        if(result != null && result.size() > 0){
 	        	return new ResponseEntity<>(new Result(true), HttpStatus.CREATED);
 	        }
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.debug("save price exception happen: " + e);
+		}
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @RequestMapping(value = "/price/update", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<Result> updatePrice(@RequestParam("prices") String prices, @RequestParam("siteId") Long siteId){
+	    if(siteId == null){
+	    	return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	    }
+        log.debug("update price for site, siteId:" + siteId);
+        log.debug(prices.toString());
+        ObjectMapper mapper = new ObjectMapper();
+		try {
+			JSONArray jsonArray = new JSONArray(prices);
+			List<Price> priceList = new ArrayList<>();
+			for (int i =0; i < jsonArray.length(); i++) {
+				Price price = mapper.readValue(jsonArray.getJSONObject(i).toString(), Price.class);
+				priceList.add(price);
+			}
+			siteService.updatePrices(priceList,siteId);
+    		return new ResponseEntity<>(new Result(true), HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.debug("save price exception happen: " + e);

@@ -38,7 +38,7 @@
               var data = new FormData();
               data.append('file', ctrl.myImg);//single file
               //TODO user really siteId
-              data.append('siteId', 1);
+              data.append('siteId', ctrl.site.id);
               
         	  ctrl.images.push({
         		  src: result,
@@ -53,7 +53,13 @@
       };
       
       function cancel(){
-    	  $state.go("siteManage");
+    	  if(ctrl.stage > 1){
+        	  Msg.showModal('警告！','确定退出新建场地?','confirm',true).result.then(function(code) {
+        		  if(code == 'ok'){
+        			  $state.go("siteManage");
+        		  }
+			  });
+    	  }else $state.go("siteManage");
       }
       
       function next(){
@@ -104,6 +110,9 @@
     	  	};
     	  	//add price
     	  	case 3: {
+    	  		if(!SiteSrvc.commonValidatePrice(ctrl.prices)){
+    	  			return;
+    	  		}
     	  		SiteSrvc.addPrice(ctrl.prices, ctrl.site.id).then(function(res){
 	  				Msg.show('价格添加成功!','S',true);
         	  		ctrl.stage ++;

@@ -65,7 +65,7 @@ public class WXSiteController {
     @RequestMapping(value = "/site/get", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<SiteDetails> getSite(@RequestParam("siteId") Long siteId){
-    	if(!(siteId > 0)){
+    	if(siteId == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 		try {

@@ -30,7 +30,6 @@ import com.spring.example.model.SiteDetails;
 import com.spring.example.model.SiteItem;
 import com.spring.example.model.WXSiteItem;
 import com.spring.example.repository.SiteRepository;
-import com.spring.example.repository.SitesGetRepository;
 import com.spring.example.repository.example.MyTableRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -40,8 +39,6 @@ public class SiteServiceTest {
 	
 	@Inject
 	private SiteRepository siteRepository;
-	@Inject
-	private SitesGetRepository sitesGetRepository;
 	@Autowired
 	MyTableRepository myTableRepository;
 	
@@ -69,8 +66,8 @@ public class SiteServiceTest {
 		BigDecimal high = new BigDecimal(4000L);
 		try {
 			
-			List<SiteDetails> siteDetails = sitesGetRepository.searchSitesByCriteria("", low, high, "");
-			log.debug(siteDetails.size() + "");
+//			List<SiteDetails> siteDetails = sitesGetRepository.searchSitesByCriteria("", low, high, "");
+//			log.debug(siteDetails.size() + "");
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();;

@@ -11,10 +11,12 @@
     			addCommunity:addCommunity,
     			updateCommunity:updateCommunity,
     			addPrice:addPrice,
+    			updatePrice:updatePrice,
     			deletePrice:deletePrice,
     			uploadPicture:uploadPicture,
     			deletePicture:deletePicture,
     			commonValidateSite:commonValidateSite,
+    			commonValidatePrice:commonValidatePrice,
     			getDistricts:getDistricts
     	};
     	return service;
@@ -71,7 +73,7 @@
 	    	return resource.addSite(siteForm).$promise;
     	}
     	
-    	function updateSite(){
+    	function updateSite(site){
 	    	var resource = $resource(ConfigSrvc.getBaseUrl()+'/site/update', {}, {
 	    		updateSite : {
 					method : 'POST',
@@ -80,7 +82,7 @@
 					isArray : false
 				}
 			});
-	    	return resource.updateSite(siteForm).$promise;
+	    	return resource.updateSite(site).$promise;
     	}
     	
     	function finishSite(siteId){
@@ -130,6 +132,25 @@
     		data.append('prices',angular.toJson(prices));
     		data.append('siteId',siteId);
 	    	var resource = $resource(ConfigSrvc.getBaseUrl()+'/site/price/add', {}, {
+	    		addPrice : {
+					method : 'POST',
+		            transformRequest: angular.identity,
+		            headers: {
+		                'Content-Type': undefined
+		            },
+					params : {
+					},
+					isArray : false
+				}
+			});
+	    	return resource.addPrice(data).$promise;
+    	}
+
+    	function updatePrice(prices,siteId){
+    		var data = new FormData();
+    		data.append('prices',angular.toJson(prices));
+    		data.append('siteId',siteId);
+	    	var resource = $resource(ConfigSrvc.getBaseUrl()+'/site/price/update', {}, {
 	    		addPrice : {
 					method : 'POST',
 		            transformRequest: angular.identity,
@@ -209,6 +230,33 @@
       	  	}
       	  	//TODO more
       	  	return true;
+		}
+		
+		function commonValidatePrice(prices){
+			if(prices == null || (prices instanceof Array && prices.length == 0)){
+				Msg.show('请输入至少一条价格信息','W',true);
+      	  		return false;
+			}
+			var continued = true;
+			angular.forEach(prices,function(item,index){
+				if(continued){
+					var prefix = "第"+(index + 1)+"条价格信息：";
+					if(Number(item.amount) <= 0){
+						Msg.show(prefix + '价格数目不能为空','W',true);
+						continued = false;
+					}
+					if(Utils.isStringEmpty(item.stallSize)){
+						Msg.show(prefix + '场地大小不能为空','W',true);
+						continued = false;
+					}
+					if(Utils.isStringEmpty(item.timeUnit)){
+						Msg.show(prefix + '时间单位不能为空','W',true);
+						continued = false;
+						return false;
+					}
+				}
+			});
+			return continued;
 		}
 		
 		function getDistricts(){

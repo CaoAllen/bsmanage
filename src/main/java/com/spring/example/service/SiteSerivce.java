@@ -1,11 +1,9 @@
 package com.spring.example.service;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,7 +34,11 @@ public interface SiteSerivce {
 	
 	public List<Price> savePrices(List<Price> prices, Long siteId) throws Exception;
 	
+	public void updatePrices(List<Price> prices, Long siteId) throws Exception;
+	
 	public Picture uploadPicture(MultipartFile uploadFile, Long siteId) throws Exception;
 	
 	public void deletePicutre(Long pictureId) throws Exception;
+	
+	public void updateCommunity(Community community) throws Exception;
 }

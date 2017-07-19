@@ -25,18 +25,23 @@ import org.springframework.web.multipart.MultipartFile;
 import com.spring.example.config.Config;
 import com.spring.example.domain.Address;
 import com.spring.example.domain.Community;
+import com.spring.example.domain.Order;
 import com.spring.example.domain.Picture;
 import com.spring.example.domain.Price;
+import com.spring.example.domain.Sales;
 import com.spring.example.domain.Site;
 import com.spring.example.exception.ResourceNotFoundException;
+import com.spring.example.model.Page;
 import com.spring.example.model.SiteDetails;
 import com.spring.example.model.SiteForm;
 import com.spring.example.model.SiteItem;
+import com.spring.example.model.WXSiteDetails;
 import com.spring.example.model.WXSiteItem;
 import com.spring.example.repository.AddressRepository;
 import com.spring.example.repository.CommunityRepository;
 import com.spring.example.repository.PictureRepository;
 import com.spring.example.repository.PriceRepository;
+import com.spring.example.repository.SalesRepository;
 import com.spring.example.repository.SiteRepository;
 import com.spring.example.utils.SessionContextUtil;
 import com.spring.example.utils.DTOUtils;
@@ -59,44 +64,40 @@ public class SiteServiceImpl implements SiteSerivce{
     private CommunityRepository communityRepository;
     private PriceRepository priceRepository;
     private PictureRepository pictureRepository;
+    private SalesRepository salesRepository;
 
     @Inject
     public SiteServiceImpl(SiteRepository siteRepository, AddressRepository addressRepository,
 			CommunityRepository communityRepository, PriceRepository priceRepository,
-			PictureRepository pictureRepository) {
+			PictureRepository pictureRepository, SalesRepository salesRepository) {
 		super();
 		this.siteRepository = siteRepository;
 		this.addressRepository = addressRepository;
 		this.communityRepository = communityRepository;
 		this.priceRepository = priceRepository;
 		this.pictureRepository = pictureRepository;
+		this.salesRepository = salesRepository;
 	}
 
 	/**
      * User for wexin interface
      */
-    public List<WXSiteItem> searchSites(String city, String name, BigDecimal priceLow, BigDecimal priceHigh, String siteType, Pageable page) {
+    public List<WXSiteItem> searchSites(String city, String name, BigDecimal priceLow, BigDecimal priceHigh, String siteType, Page page) {
     	if(log.isDebugEnabled()){
     		log.debug("city:"+city);
-    		try {
-				log.debug(new String(city.getBytes("ISO-8859-1"), "UTF-8").toString());
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
     		log.debug("name:"+name);
     		log.debug("priceLow:"+priceLow);
     		log.debug("priceHigh:"+priceHigh);
     		log.debug("siteType:"+siteType);
-    		log.debug("pageNum :"+page.getPageNumber());
+    		log.debug("pageNum :"+page.getPageNo());
     		log.debug("pageSize :"+page.getPageSize());
-    		log.debug("sort :"+page.getSort());
+    		log.debug("sort :"+page.getSortName() + " "+page.getSortDirection());
     	}
     	return siteRepository.searchSites(city, name, priceLow, priceHigh, siteType, page);
     }
     
-    public List<SiteItem> queryAllSites(String name, Pageable pageable) throws SQLException{
-    	List<SiteItem> sites = siteRepository.queryAllSites(name, pageable);
+    public List<SiteItem> queryAllSites(String name, String district) throws SQLException{
+    	List<SiteItem> sites = siteRepository.queryAllSites(name, district);
     	return sites;
     }
 
@@ -130,7 +131,19 @@ public class SiteServiceImpl implements SiteSerivce{
 		return null;
 	}
 	
-	public SiteDetails getSite(Long siteId) throws Exception{
+	public WXSiteDetails getWXSiteDetails(Long siteId) throws Exception{
+		WXSiteDetails details = (WXSiteDetails) getSiteDetails(siteId);
+		Sales sales = salesRepository.findBySiteId(siteId);
+		if(sales == null){
+			sales = new Sales();
+			sales.setSalesVolumn(0L);
+			sales.setScore(10);
+		}
+		details.setSales(sales);
+		return details;
+	}
+	
+	public SiteDetails getSiteDetails(Long siteId) throws Exception{
 		SiteDetails result = new SiteDetails();
 		Site site = siteRepository.findOne(siteId);
 		if(site == null){
@@ -194,6 +207,16 @@ public class SiteServiceImpl implements SiteSerivce{
 		site.setStatus(SiteStatus.F.toString());
 		Site result = siteRepository.save(site);
 		if(result != null){
+			Sales sales = new Sales();
+			sales.setSiteId(siteId);
+			sales.setSalesVolumn(0L);
+			sales.setScore(10);
+			sales.setCreateTime(new Date());
+			sales.setCreateUser("system");
+			sales.setUpdateTime(new Date());
+			sales.setUpdateUser("system");
+			salesRepository.save(sales);
+			
 			return true;
 		}
 		return false;
@@ -354,12 +377,58 @@ public class SiteServiceImpl implements SiteSerivce{
 	public void deletePicutre(Long pictureId) throws Exception{
 		Picture picture = pictureRepository.findOne(pictureId);
 		if(picture != null){
+			deletePicutreInDisk(picture);
+			pictureRepository.delete(pictureId);
+		}
+	}
+	
+	private void deletePicutreInDisk(Picture picture){
+		if(picture != null && picture.getPath() != null){
 			String imgName = picture.getPath().split("\\/")[1];
 			File imgFile = new File(Config.IMG_SITEPATH + "\\" + imgName);
 			if(imgFile.exists()){
 				imgFile.delete();
 			}
-			pictureRepository.delete(pictureId);
 		}
+	}
+
+	public boolean deleteSite(Long siteId) throws Exception{
+		List<Picture> pictures = pictureRepository.findBySiteId(siteId);
+		if(pictures != null && pictures.size() > 0){
+			for (Picture p : pictures) {
+				deletePicutreInDisk(p);
+			}
+			pictureRepository.delete(pictures);
+		}
+		List<Price> prices = priceRepository.findBySiteId(siteId);
+		if(prices != null && prices.size() > 0){
+			priceRepository.delete(prices);
+		}
+		Community community = communityRepository.findBySiteId(siteId);
+		if(community != null){
+			communityRepository.delete(community);
+		}
+		Address address = addressRepository.findBySiteId(siteId);
+		if(address != null){
+			addressRepository.delete(address);
+		}
+		siteRepository.delete(siteId);
+		
+		return true;
+	}
+
+	public boolean disableSite(Long siteId) throws Exception{
+		Site site = siteRepository.findOne(siteId);
+		if(site == null){
+			throw new ResourceNotFoundException(siteId);
+		}
+		site.setUpdateTime(new Date());
+		site.setUpdateUser(SessionContextUtil.getUserName());
+		site.setStatus(SiteStatus.D.toString());
+		Site result = siteRepository.save(site);
+		if(result != null){
+			return true;
+		}
+		return false;
 	}
 }

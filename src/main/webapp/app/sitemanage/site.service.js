@@ -8,6 +8,8 @@
     			addSite:addSite,
     			updateSite:updateSite,
     			finishSite:finishSite,
+    			deleteSite:deleteSite,
+    			disableSite:disableSite,
     			addCommunity:addCommunity,
     			updateCommunity:updateCommunity,
     			addPrice:addPrice,
@@ -22,6 +24,18 @@
     	return service;
     	
     	function getSites(search){
+    		var params = {
+			        'name': '',
+			        'district': ''
+			};
+    		if(search){
+    			if(search.name){
+        			params.name = search.name;
+    			}
+    			if(search.district){
+        			params.district = search.district;
+    			}
+    		}
 	    	var resource = $resource(ConfigSrvc.getBaseUrl()+'/site/list', {}, {
 	    		getSites : {
 					method : 'POST',
@@ -30,13 +44,7 @@
 				        'Content-Type': 'application/x-www-form-urlencoded',
 				        'charset':'UTF-8'
 				    },
-					params : {
-				        'name': "",
-				        'pageNo': 0,
-				        'pageSize': 10,
-				        'sortName': 'updateTime',
-				        'sortDirection': 'DESC'
-					},
+					params : params,
 					isArray : true
 				}
 			});
@@ -101,6 +109,42 @@
 				}
 			});
 	    	return resource.finishSite(data).$promise;
+    	}
+    	
+    	function deleteSite(siteId){
+    		var data = new FormData();
+    		data.append('siteId', siteId);
+	    	var resource = $resource(ConfigSrvc.getBaseUrl()+'/site/delete', {}, {
+	    		deleteSite : {
+					method : 'POST',
+		            transformRequest: angular.identity,
+		            headers: {
+		                'Content-Type': undefined
+		            },
+					params : {
+					},
+					isArray : false
+				}
+			});
+	    	return resource.deleteSite(data).$promise;
+    	}
+    	
+    	function disableSite(siteId){
+    		var data = new FormData();
+    		data.append('siteId', siteId);
+	    	var resource = $resource(ConfigSrvc.getBaseUrl()+'/site/disable', {}, {
+	    		disableSite: {
+					method : 'POST',
+		            transformRequest: angular.identity,
+		            headers: {
+		                'Content-Type': undefined
+		            },
+					params : {
+					},
+					isArray : false
+				}
+			});
+	    	return resource.disableSite(data).$promise;
     	}
     	
     	function addCommunity(community){

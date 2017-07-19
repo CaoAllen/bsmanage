@@ -1,4 +1,7 @@
 {
+
+	"baseUrl_product":"http://123.206.129.149/BSManageAdmin/api",
+	"imgUrl_product":"http://123.206.129.149/bsImg/",
 	"baseUrl":"http://localhost:8080/BSManageAdmin/api",
 	"imgUrl":"http://localhost:8081/bsImg/"
 }

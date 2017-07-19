@@ -63,16 +63,9 @@ public class SiteController {
 	@ResponseBody
 	public ResponseEntity<List<SiteItem>> getSites(
 			@RequestParam(value = "name") String name,
-			@RequestParam(value = "pageNo", required = true) int pageNo,
-			@RequestParam(value = "pageSize", required = true) int pageSize,
-			@RequestParam(value = "sortName", required = true) String sortName,
-			@RequestParam(value = "sortDirection") String sortDirection){
-		if(!"DESC".equalsIgnoreCase(sortDirection)){
-			sortDirection = "ASC";
-		}
-		PageRequest pageRequest = new PageRequest(pageNo, pageSize, Direction.fromString(sortDirection), sortName);
+			@RequestParam(value = "district") String district){
 		try {
-			List<SiteItem> sites = siteService.queryAllSites(name,pageRequest);
+			List<SiteItem> sites = siteService.queryAllSites(name,district);
 			return new ResponseEntity<>(sites, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -111,7 +104,7 @@ public class SiteController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 		try {
-			SiteDetails details = siteService.getSite(siteId);
+			SiteDetails details = siteService.getSiteDetails(siteId);
 	        if(details != null){
 	        	return new ResponseEntity<>(details, HttpStatus.OK);
 	        }
@@ -155,6 +148,42 @@ public class SiteController {
 		try {
 			updated = siteService.finishSite(siteId);
 	        if(updated){
+	        	return new ResponseEntity<>(new Result(true), HttpStatus.OK);
+	        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<Result> deleteSite(@RequestParam("siteId") Long siteId){
+	    if(siteId == null){
+	    	return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	    }
+        boolean deleted;
+		try {
+			deleted = siteService.deleteSite(siteId);
+	        if(deleted){
+	        	return new ResponseEntity<>(new Result(true), HttpStatus.OK);
+	        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @RequestMapping(value = "/disable", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<Result> disableSite(@RequestParam("siteId") Long siteId){
+	    if(siteId == null){
+	    	return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	    }
+        boolean disabled;
+		try {
+			disabled = siteService.disableSite(siteId);
+	        if(disabled){
 	        	return new ResponseEntity<>(new Result(true), HttpStatus.OK);
 	        }
 		} catch (Exception e) {

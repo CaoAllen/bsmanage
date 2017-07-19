@@ -1,12 +1,16 @@
 (function(){
 	var as = angular.module('manageApp.site');
     as.controller('SiteManageController', SiteManageCtrl);
-    SiteManageCtrl.$inject = ['$scope','$state','$rootScope','$http','$location','$translate','rowSorter','uiGridConstants','SiteSrvc'];
-    function SiteManageCtrl($scope, $state, $rootScope, $http, $location, $translate, rowSorter, uiGridConstants,SiteSrvc) {
+    SiteManageCtrl.$inject = ['$scope','$state','$rootScope','$http','$location','$translate','rowSorter','uiGridConstants','SiteSrvc','Msg'];
+    function SiteManageCtrl($scope, $state, $rootScope, $http, $location, $translate, rowSorter, uiGridConstants,SiteSrvc,Msg) {
       var ctrl = this;
+      ctrl.search = search;
+      ctrl.reset = reset;
       ctrl.add = add;
       ctrl.goDetail = goDetail;
       ctrl.goEdit = goEdit;
+      ctrl.remove = remove;
+      ctrl.disable = disable;
       gridInit();
       loadData();
       
@@ -53,7 +57,9 @@
 				return status == 'F';
 			}
 			var actionCellTemplate = "<div class=\"ui-grid-cell-contents \" style=\"text-align: center\" title=\"TOOLTIP\">" +
-					"<a href='javascript:void(0)' ng-click=\"grid.appScope.goEdit(row.entity.siteId);\"><i class='glyphicon glyphicon-edit'></i></a></div>";
+					"<a href='javascript:void(0)' title='修改' ng-click=\"grid.appScope.goEdit(row.entity.siteId);\"><i class='glyphicon glyphicon-edit'></i></a>&nbsp;&nbsp;&nbsp;" +
+					"<a href='javascript:void(0)' title='禁用' ng-click=\"grid.appScope.disable(row.entity.siteId);\"><i class='glyphicon glyphicon-ban-circle'></i></a>&nbsp;&nbsp;&nbsp;" +
+					"<a href='javascript:void(0)' title='删除' ng-click=\"grid.appScope.remove(row.entity.siteId);\"><i class='glyphicon glyphicon-remove'></i></a></div>";
 			var nameCellTemplate = "<div class=\"ui-grid-cell-contents\" title=\"TOOLTIP\"><a href='javascript:void(0)'  ng-click=\"grid.appScope.goDetail(row.entity.siteId);\">{{COL_FIELD CUSTOM_FILTERS}}</a></div>";
 			var statusCellTemplate = "<div class=\"ui-grid-cell-contents\" title=\"TOOLTIP\"><span style=\"{{grid.appScope.isFinish(row.entity.status)?'':'color:red'}}\">{{grid.appScope.showStatus(row.entity.status)}}</span></div>";
 			
@@ -105,8 +111,8 @@
             }
       }
       
-      function loadData(){
-    	  SiteSrvc.getSites().then(function(data){
+      function loadData(params){
+    	  SiteSrvc.getSites(params).then(function(data){
     		  ctrl.gridOptions.data = data;
     		  angular.forEach(ctrl.gridOptions.data,function(item,index){
     			  if(item.status == 'F'){
@@ -116,6 +122,15 @@
     	  },function(error){
     		 console.dir(error); 
     	  });
+      }
+      
+      function search(){
+    	  loadData(ctrl.searchParams);
+      }
+
+      function reset(){
+    	  ctrl.searchParams = {};
+    	  loadData();
       }
       
       function add(){
@@ -128,6 +143,33 @@
       
       function goEdit(siteId){
     	  $state.go('siteManage.edit',{'siteId':siteId});
+      }
+      
+      function remove(siteId){
+    	  Msg.showModal('','确定删除此场地吗?','confirm').result.then(function(code) {
+  				if(code == 'ok'){
+  					SiteSrvc.deleteSite(siteId).then(function(){
+  						Msg.show('删除成功','S',true);
+  						loadData();
+  					},function(error){
+  						console.dir(error); 
+					})	
+  				}
+		  });
+      }
+      
+
+      function disable(siteId){
+    	  Msg.showModal('','确定禁用此场地吗?','confirm').result.then(function(code) {
+  				if(code == 'ok'){
+  					SiteSrvc.disableSite(siteId).then(function(){
+  						Msg.show('修改成功','S',true);
+  						loadData();
+  					},function(error){
+  						console.dir(error); 
+  					})	
+  				}
+  		  });
       }
     }
 })();

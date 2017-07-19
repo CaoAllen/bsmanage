@@ -9,18 +9,18 @@
                     <div class="form-group">
                         <label class="control-label col-md-1" for="siteName" translate>site.name</label>
                         <div class="col-md-4">
-                            <input class="form-control" id="siteName" ng-model="ctrl.search.siteName" />
+                            <input class="form-control" id="siteName" ng-model="ctrl.searchParams.name" />
                         </div>
                         <label class="control-label col-md-1" for="district" translate>site.address.district</label>
                         <div class="col-md-4">
-                            <input class="form-control" id="district" ng-model="ctrl.search.district" />
+                            <input class="form-control" id="district" ng-model="ctrl.searchParams.district" />
                         </div>
                     </div>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-xs-12 col-md-12 btn-toolbar">
-					<button class="btn btn-primary pull-right" id="reset" type="button" ng-click="ctrl.rest();" translate>rest</button>
+					<button class="btn btn-primary pull-right" id="reset" type="button" ng-click="ctrl.reset();" translate>rest</button>
 					<button class="btn btn-danger pull-right" id="search" type="button" ng-click="ctrl.search();" translate>search</button>
 				</div>
 			</div>

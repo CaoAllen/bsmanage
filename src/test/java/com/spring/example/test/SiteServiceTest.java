@@ -79,10 +79,9 @@ public class SiteServiceTest {
 		// 调用存储过程
 		BigDecimal low = new BigDecimal(0L);
 		BigDecimal high = new BigDecimal(4000L);
-		PageRequest pageRequest = new PageRequest(0, 10, Direction.DESC, "salesVolumn");
 		try {
-			List<WXSiteItem> list = siteRepository.searchSites("上海市", "", low, high, "", pageRequest);
-			log.debug(list.size() + "");
+//			List<WXSiteItem> list = siteRepository.searchSites("上海市", "", low, high, "", pageRequest);
+//			log.debug(list.size() + "");
 			
 		} catch (Exception e) {
 			// TODO: handle exception

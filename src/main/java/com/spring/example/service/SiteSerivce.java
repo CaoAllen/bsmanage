@@ -11,22 +11,26 @@ import com.spring.example.domain.Community;
 import com.spring.example.domain.Picture;
 import com.spring.example.domain.Price;
 import com.spring.example.domain.Site;
+import com.spring.example.model.Page;
 import com.spring.example.model.SiteDetails;
 import com.spring.example.model.SiteForm;
 import com.spring.example.model.SiteItem;
+import com.spring.example.model.WXSiteDetails;
 import com.spring.example.model.WXSiteItem;
 
 public interface SiteSerivce {
 
-	public List<WXSiteItem> searchSites(String city, String name, BigDecimal priceLow, BigDecimal priceHigh, String siteType, Pageable page);
+	public List<WXSiteItem> searchSites(String city, String name, BigDecimal priceLow, BigDecimal priceHigh, String siteType, Page page);
 	
 	public Site saveSite(SiteForm fm) throws Exception;
 	
-	public SiteDetails getSite(Long siteId) throws Exception;
+	public SiteDetails getSiteDetails(Long siteId) throws Exception;
+	
+	public WXSiteDetails getWXSiteDetails(Long siteId) throws Exception;
 	
 	public boolean updateSite(SiteForm sf) throws Exception;
 	
-	public List<SiteItem> queryAllSites(String name, Pageable pageable) throws SQLException;
+	public List<SiteItem> queryAllSites(String name, String district) throws SQLException;
 	
 	public Community saveCommunity(Community community) throws SQLException;
 	
@@ -41,4 +45,8 @@ public interface SiteSerivce {
 	public void deletePicutre(Long pictureId) throws Exception;
 	
 	public void updateCommunity(Community community) throws Exception;
+	
+	public boolean deleteSite(Long siteId) throws Exception;
+	
+	public boolean disableSite(Long siteId) throws Exception;
 }

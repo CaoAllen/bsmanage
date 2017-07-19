@@ -3,19 +3,20 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="">
         <meta name="author" content="">
         <link rel="shortcut icon" href="ico/favicon.ico">
 
-        <title>REST APP</title>
+        <title>大公集后端管理系统</title>
         <link rel="stylesheet" href="webjars/bootstrap/3.3.6/css/bootstrap.min.css"/>  
         <link rel="stylesheet" href="webjars/bootstrap-material-design/0.3.0/css/material.min.css"/>  
         <link rel="stylesheet" href="webjars/bootstrap-material-design/0.3.0/css/ripples.min.css"/> 
         <link rel="stylesheet" href="webjars/bootstrap-material-design/0.3.0/css/roboto.min.css"/> 
        	<link rel="stylesheet" href="components/angular-ui-grid/ui-grid.css" />
-        <link rel="stylesheet" href="css/main.css" />
 		<link rel="stylesheet" href="components/font-awesome-4.6.3/css/font-awesome.min.css"></link>
+        <link rel="stylesheet" href="css/main.css" />
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
                       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -38,7 +39,7 @@
 	                            class="icon-bar"></span> <span class="icon-bar"></span> <span
 	                            class="icon-bar"></span>
 	                    </button>
-	                    <a class="navbar-brand" href="/home" translate>appName</a>
+	                    <a class="navbar-brand" href="" ng-click="ctrl.go('home')" translate>appName</a>
 	                </div>
 	                <div class="navbar-collapse collapse">
 	                    <ul class="nav navbar-nav" ng-show="authenticated">

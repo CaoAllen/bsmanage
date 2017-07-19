@@ -3,6 +3,7 @@ package com.spring.example.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Date;
 
 public class WXSiteItem implements Serializable{
 
@@ -14,6 +15,7 @@ public class WXSiteItem implements Serializable{
 	private BigInteger id;
 	private String name;
 	private int flowrate;
+	private Date createTime;
 	private BigDecimal price;
 	private String path;
 	private String city;
@@ -38,6 +40,12 @@ public class WXSiteItem implements Serializable{
 	}
 	public void setFlowrate(int flowrate) {
 		this.flowrate = flowrate;
+	}
+	public Date getCreateTime() {
+		return createTime;
+	}
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
 	public BigDecimal getPrice() {
 		return price;

@@ -19,7 +19,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.spring.example.Constants;
+import com.spring.example.model.Page;
+import com.spring.example.model.Page.Sort;
 import com.spring.example.model.SiteDetails;
+import com.spring.example.model.WXSiteDetails;
 import com.spring.example.model.WXSiteItem;
 import com.spring.example.service.SiteServiceImpl;
 
@@ -49,12 +52,12 @@ public class WXSiteController {
 			@RequestParam(value = "sortDirection") String sortDirection){
 		BigDecimal low = new BigDecimal(priceLow);
 		BigDecimal high = new BigDecimal(priceHigh);
-		if(!"DESC".equalsIgnoreCase(sortDirection)){
-			sortDirection = "ASC";
+		if(!Sort.DESC.toString().equalsIgnoreCase(sortDirection)){
+			sortDirection = Sort.ASC.toString();
 		}
-		PageRequest pageRequest = new PageRequest(pageNo, pageSize, Direction.fromString(sortDirection), sortName);
+		Page page = new Page(sortName, sortDirection, pageNo, pageSize);
 		try {
-			List<WXSiteItem> items = siteService.searchSites(city, name, low, high, siteType, pageRequest);
+			List<WXSiteItem> items = siteService.searchSites(city, name, low, high, siteType, page);
 			return new ResponseEntity<>(items, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -64,12 +67,12 @@ public class WXSiteController {
 	
     @RequestMapping(value = "/site/get", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<SiteDetails> getSite(@RequestParam("siteId") Long siteId){
+    public ResponseEntity<WXSiteDetails> getSite(@RequestParam("siteId") Long siteId){
     	if(siteId == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 		try {
-			SiteDetails details = siteService.getSite(siteId);
+			WXSiteDetails details = siteService.getWXSiteDetails(siteId);
 	        if(details != null){
 	        	return new ResponseEntity<>(details, HttpStatus.OK);
 	        }

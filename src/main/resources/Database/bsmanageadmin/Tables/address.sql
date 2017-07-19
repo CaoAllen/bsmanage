@@ -22,10 +22,10 @@ DROP TABLE IF EXISTS `address`;
 CREATE TABLE `address` (
   `address_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `address_detail` varchar(255) DEFAULT NULL,
-  `city` varchar(255) DEFAULT NULL,
+  `city` varchar(20) DEFAULT NULL,
   `create_time` datetime NOT NULL,
   `create_user` varchar(20) NOT NULL,
-  `district` varchar(255) DEFAULT NULL,
+  `district` varchar(20) DEFAULT NULL,
   `latitude` double DEFAULT NULL,
   `longitude` double DEFAULT NULL,
   `site_id` bigint(20) DEFAULT NULL,

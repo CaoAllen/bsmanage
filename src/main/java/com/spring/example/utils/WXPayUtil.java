@@ -23,6 +23,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
@@ -166,9 +167,8 @@ public class WXPayUtil {
 		return buffer.toString();
 	}
 	
-	public static Map<String, String> covertStrToMap(String result){
+	public static Map<String, String> covertStrToMap(String result) throws DocumentException{
 		Map<String, String> map = new HashMap<>();   
-		try {
 	         InputStream in=new ByteArrayInputStream(result.getBytes());    
 	        SAXReader reader = new SAXReader(); 
 	        reader.setEncoding("GBK");
@@ -178,9 +178,6 @@ public class WXPayUtil {
 	        for (Element element : elementList) {   
 	            map.put(element.getName(), element.getText());   
 	        } 
-		} catch (Exception e) {
-            e.printStackTrace(); 
-		}
 		return map;
 	}
 	

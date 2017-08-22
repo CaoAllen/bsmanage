@@ -1,25 +1,15 @@
 package com.spring.example.api;
 
-import java.io.File;
-import java.io.InputStream;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jettison.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -39,11 +29,9 @@ import com.spring.example.domain.Price;
 import com.spring.example.domain.Result;
 import com.spring.example.domain.Site;
 import com.spring.example.exception.InvalidRequestException;
-import com.spring.example.model.ResponseMessage;
 import com.spring.example.model.SiteDetails;
 import com.spring.example.model.SiteForm;
 import com.spring.example.model.SiteItem;
-import com.spring.example.model.WXSiteItem;
 import com.spring.example.service.SiteServiceImpl;
 import com.spring.example.utils.SiteUtil;
 

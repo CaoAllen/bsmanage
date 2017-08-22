@@ -4,6 +4,9 @@ public class Test{
     private int id;
     private String data;
     private String data1;
+    public static void sayHello(){
+    	System.out.println("hello");
+    }
     
     public Test(int id,String data){
     	this.id = id;

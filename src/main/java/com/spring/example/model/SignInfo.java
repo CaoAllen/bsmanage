@@ -7,6 +7,7 @@ public class SignInfo {
 	private String signType;
 	private String paySign;
 	private String timeStamp;
+	private String orderNo;
 	
 	public String getAppId() {
 		return appId;
@@ -43,6 +44,12 @@ public class SignInfo {
 	}
 	public void setTimeStamp(String timeStamp) {
 		this.timeStamp = timeStamp;
+	}
+	public String getOrderNo() {
+		return orderNo;
+	}
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
 	}
 	
 }

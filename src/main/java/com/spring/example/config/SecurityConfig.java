@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.authentication.dao.SaltSource;
+import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.security.authentication.encoding.PlaintextPasswordEncoder;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,9 +19,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+
+import com.spring.example.service.CustomSaltSource;
 
 @Configuration
 @EnableWebSecurity
@@ -53,6 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.logout().and()
 			.authorizeRequests()
             	.antMatchers("/api/ping").permitAll()  
+            	.antMatchers("/api/logout").permitAll()  
             	.antMatchers("/api/wx/**").permitAll()  
 				.antMatchers("/home.html", "/login.html", "/").permitAll()
 				.anyRequest().authenticated()
@@ -63,8 +72,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired  
     public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {  
-        auth.userDetailsService(userDetailsService);  
+//        auth.userDetailsService(userDetailsService);  
+		auth.authenticationProvider(authenticationProvider());
     }  
+	
+	@Bean
+	public AuthenticationProvider authenticationProvider() {
+	    DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+	    authenticationProvider.setUserDetailsService(userDetailsService);
+	    authenticationProvider.setPasswordEncoder(passwordEncoder()); 
+//	    authenticationProvider.setSaltSource(saltSource());
+	    return authenticationProvider;
+	}
 
     @Bean  
     public PersistentTokenRepository persistentTokenRepository() {  
@@ -86,23 +105,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	@Bean
-	public PlaintextPasswordEncoder passwordEncoder() {
-		return new PlaintextPasswordEncoder() ;
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder() ;
 	}
 	
-//	@SuppressWarnings("deprecation")
-//	public class MyPasswordEncoder implements PasswordEncoder{
-//		@Override
-//		public String encodePassword(String arg0, Object arg1) {
-//			// TODO Auto-generated method stub
-//			return null;
-//		}
-//
-//		@Override
-//		public boolean isPasswordValid(String arg0, String arg1, Object arg2) {
-//			// TODO Auto-generated method stub
-//			return false;
-//		}
-//	}
+	@Bean
+	public SaltSource saltSource() {
+	    return new CustomSaltSource();
+	}
 
 }

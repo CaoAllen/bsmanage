@@ -779,8 +779,8 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-<!--                 <jdbc.url><![CDATA[jdbc:mysql://123.206.129.149:3306/bsmanageadmin]]> -->
-                <jdbc.url><![CDATA[jdbc:mysql://localhost:3306/bsmanageadmin]]>
+                <jdbc.url><![CDATA[jdbc:mysql://123.206.129.149:3306/bsmanageadmin]]>
+<!--                 <jdbc.url><![CDATA[jdbc:mysql://localhost:3306/bsmanageadmin]]> -->
                 </jdbc.url>
                 <jdbc.username>root</jdbc.username>
                 <jdbc.password>lp62</jdbc.password>

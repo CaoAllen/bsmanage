@@ -19,6 +19,8 @@ public final class Constants {
 
     public static final String URI_PAYMENT_REQUESTPAY = "/payment/requestpay";
     
+    public static final String URI_PAYMENT_FINISH = "/payment/finish";
+    
     private Constants() {
         throw new InstantiationError( "Must not instantiate this class" );
     }

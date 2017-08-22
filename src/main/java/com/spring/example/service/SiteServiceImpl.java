@@ -1,7 +1,6 @@
 package com.spring.example.service;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,7 +16,6 @@ import javax.inject.Inject;
 import org.modelmapper.PropertyMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.spring.example.config.Config;
 import com.spring.example.domain.Address;
 import com.spring.example.domain.Community;
-import com.spring.example.domain.Order;
 import com.spring.example.domain.Picture;
 import com.spring.example.domain.Price;
 import com.spring.example.domain.Sales;
@@ -132,41 +129,47 @@ public class SiteServiceImpl implements SiteSerivce{
 	}
 	
 	public WXSiteDetails getWXSiteDetails(Long siteId) throws Exception{
-		WXSiteDetails details = (WXSiteDetails) getSiteDetails(siteId);
+		WXSiteDetails result = new WXSiteDetails();
+		getSiteDetails(siteId,result);
 		Sales sales = salesRepository.findBySiteId(siteId);
 		if(sales == null){
 			sales = new Sales();
 			sales.setSalesVolumn(0L);
 			sales.setScore(10);
 		}
-		details.setSales(sales);
-		return details;
+		result.setSales(sales);
+		return result;
 	}
 	
 	public SiteDetails getSiteDetails(Long siteId) throws Exception{
 		SiteDetails result = new SiteDetails();
+		getSiteDetails(siteId,result);
+		return result;
+		
+	}
+	
+	private void getSiteDetails(Long siteId, SiteDetails details) throws Exception{
 		Site site = siteRepository.findOne(siteId);
 		if(site == null){
 			throw new ResourceNotFoundException(siteId);
 		}
-		result.setSite(site);
+		details.setSite(site);
 		Address address = addressRepository.findBySiteId(siteId);
 		if(address != null){
-			result.setAddress(address);
+			details.setAddress(address);
 		}
 		Community community = communityRepository.findBySiteId(siteId);
 		if(community != null){
-			result.setCommunity(community);
+			details.setCommunity(community);
 		}
 		List<Price> prices = priceRepository.findBySiteId(siteId);
 		if(prices != null){
-			result.setPrices(prices);
+			details.setPrices(prices);
 		}
 		List<Picture> pictures = pictureRepository.findBySiteId(siteId);
 		if(pictures != null){
-			result.setPictures(pictures);
+			details.setPictures(pictures);
 		}
-		return result;
 	}
 
 	public boolean updateSite(SiteForm sf) throws Exception{

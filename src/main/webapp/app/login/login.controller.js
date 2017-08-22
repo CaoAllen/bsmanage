@@ -5,13 +5,18 @@
     function LoginCtrl($scope, $rootScope, $http, $location, $state, LoginSrvc) {
     	var ctrl = this;
     	
+    	LoginSrvc.logout().then(function(res){
+			delete $rootScope.authenticated;
+			delete $rootScope.initalLoad;
+			delete $rootScope.userName;
+    	});
+    	
     	ctrl.login = function () {
 			if(ctrl.status == 'login'){
 				return;
 			}
 			ctrl.status = 'login';
     		LoginSrvc.login(ctrl.userName,ctrl.password).then(function(data){
-    			console.dir(data);
 				ctrl.status = 'success';
     			$rootScope.authenticated = true;
     			$rootScope.initalLoad = true;

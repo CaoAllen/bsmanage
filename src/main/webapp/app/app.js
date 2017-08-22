@@ -5,6 +5,7 @@
 	   'manageApp.main',
 	   'manageApp.utils',
 	   'manageApp.site',
+	   'manageApp.order',
        'ui.router',
        'ui.bootstrap',
        'ngResource',
@@ -127,6 +128,14 @@
 	            'maincontent@': {
 	               templateUrl: "app/sitemanage/site.html",
 	               controller: 'SiteManageController as ctrl'
+	            }
+	         }
+     	}).state('orderManage', {
+	         url: "/orderManage",
+	         views: {
+	            'maincontent@': {
+	               templateUrl: "app/ordermanage/order.html",
+	               controller: 'OrderManageController as ctrl'
 	            }
 	         }
      	});

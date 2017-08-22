@@ -45,6 +45,8 @@
 	                    <ul class="nav navbar-nav" ng-show="authenticated">
 	                        <li role="button" ng-class="ctrl.activeWhen(ctrl.path() == '/siteManage')"><a
 	                                ng-click="ctrl.go('siteManage')">场地管理</a></li>
+	                        <li role="button" ng-class="ctrl.activeWhen(ctrl.path() == '/orderManage')"><a
+	                                ng-click="ctrl.go('orderManage')">订单管理</a></li>
 	                    </ul>
 	                    <span class="navbar-right" ng-if="!authenticated">
 	                        <a class="btn btn-success navbar-btn" ng-click="ctrl.login()" translate>login</a>
@@ -142,6 +144,10 @@
 	<script src="app/sitemanage/addSite.controller.js"></script>
 	<script src="app/sitemanage/viewSite.controller.js"></script>
 	<script src="app/sitemanage/editSite.controller.js"></script>
+	
+	<script src="app/ordermanage/order.js"></script>
+	<script src="app/ordermanage/order.service.js"></script>
+	<script src="app/ordermanage/order.controller.js"></script>
 	
 	<script src="app/appbootstrap.js"></script>
     </body>

@@ -1,8 +1,8 @@
 (function(){
 	angular.module('manageApp.main').controller('MainController', MainCtrl);    
-    MainCtrl.$inject = ['$q','$scope','$rootScope','$location','$translate','$state','ConfigSrvc', 'LoginSrvc','AppInitSrvc'];
+    MainCtrl.$inject = ['$q','$scope','$rootScope','$location','$translate','$state','ConfigSrvc', 'LoginSrvc','AppInitSrvc','Msg'];
     
-    function MainCtrl($q, $scope, $rootScope, $location, $translate, $state, ConfigSrvc, LoginSrvc, AppInitSrvc) {
+    function MainCtrl($q, $scope, $rootScope, $location, $translate, $state, ConfigSrvc, LoginSrvc, AppInitSrvc, Msg) {
     	var ctrl = this;
     	ctrl.go = go;
         var load = function () {
@@ -10,12 +10,13 @@
         	
     		$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, error){
     			$rootScope.clearMessage();
-    			if(!($rootScope.authenticated && $rootScope.initalLoad)){
+    			//should invoke when use refresh browser
+    			if((fromState.name == '' ||  fromState.url == '^') && !isInLogin(toState)){
 					loadServiceContext();
 				}
     		});
         };
-        load();
+    	load();
         ctrl.getLanguage = function(){
         	return ConfigSrvc.getLanguage();
         };
@@ -42,14 +43,15 @@
         };
 
         ctrl.logout = function () {
-			$rootScope.authenticated = false;
-			$rootScope.initalLoad = false;
-			$rootScope.userName = null;
-            $location.url('/login');
+	  	  	Msg.showModal('','确定退出吗?','confirm').result.then(function(code) {
+  	  			if(code == 'ok'){
+  	  				go('login');
+				}
+	  	  	});
         };
         
         function go(state){
-        	$state.go(state);
+        	$state.go(state,{},{reload:true});
         }
         
         function loadServiceContext(){
@@ -62,10 +64,16 @@
         			});
         		}
         	},function(error){
-    			$rootScope.authenticated = false;
         		console.dir(error);
-        		go('login');
+        		if(!isInLogin()){
+        			go('login');
+        		}
         	});
+        }
+        
+        function isInLogin(state){
+        	if(state == undefined) state = $state.current;
+        	return state.name == 'login' && state.url == '/login';
         }
 
 	}

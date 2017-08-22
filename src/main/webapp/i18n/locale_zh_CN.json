@@ -1,5 +1,6 @@
 {
 	"appName":"\u5927\u516c\u96c6\u7ba1\u7406\u7cfb\u7edf",
+	"starthere":"\u5f00\u59cb\u4f7f\u7528",
 	"rightSectionMessage":"\u6ce8\u518c\u529f\u80fd\u6682\u672a\u5f00\u653e",
 	"systemDescriptionTitle":"\u7cfb\u7edf\u8bf4\u660e",
 	"systemDescription":"\u5f53\u524d\u7248\u672c\u003a\u0020\u0076\u0031\u002e\u0030\u002e\u0030<br/>\u4e0a\u7ebf\u65e5\u671f\uff1a\u0032\u0030\u0031\u0037\u002d\u0030\u0037\u002d\u0031\u0037<br/>",
@@ -22,6 +23,7 @@
 	"passwordUpdated":"\u5bc6\u7801\u66f4\u65b0\u6210\u529f!",
 	"profileUpdated":"\u4e2a\u4eba\u8d44\u6599\u5df2\u7ecf\u66f4\u65b0\u6210\u529f!",
 	"logout":"\u9000\u51fa",
+	"logoutsuccess":"\u6210\u529f\u9000\u51fa\uff01",
 	"login":"\u767b\u9646",
 	"availableActions":"\u53ef\u7528\u64cd\u4f5c",
 	"userAdmin":"\u7528\u6237\u7ba1\u7406",
@@ -120,6 +122,12 @@
 			"uploaded":"\u5df2\u4e0a\u4f20",
 			"delete":"\u5220\u9664"
 		}
+	},
+	"order":{
+		"manage":{
+			"title":"\u8ba2\u5355\u7ba1\u7406"
+		},
+		"number":"\u8ba2\u5355\u7f16\u53f7"
 	}
 	
 }

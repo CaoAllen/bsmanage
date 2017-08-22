@@ -23,14 +23,19 @@
 		}
 		
 		function logout(){
-			
+			return $http({
+    			method: 'GET',
+    			url: ConfigSrvc.getBaseUrl()+'/logout',
+    			byPass401Interceptor: true
+			});
 		}
 		
 		function loadServiceContext(){
 			var appUrl = ConfigSrvc.getBaseUrl();
 			return $http({
     			method: 'POST',
-    			url: appUrl+'/context'
+    			url: appUrl+'/context',
+    			byPass401Interceptor: true
 			});
 		}
     }

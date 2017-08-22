@@ -1,8 +1,8 @@
 (function(){
-	var as = angular.module('manageApp.site');
-    as.controller('SiteManageController', SiteManageCtrl);
-    SiteManageCtrl.$inject = ['$scope','$state','$rootScope','$http','$location','$translate','rowSorter','uiGridConstants','SiteSrvc','Msg'];
-    function SiteManageCtrl($scope, $state, $rootScope, $http, $location, $translate, rowSorter, uiGridConstants,SiteSrvc,Msg) {
+	var as = angular.module('manageApp.order');
+    as.controller('OrderManageController', OrderManageCtrl);
+    OrderManageCtrl.$inject = ['$scope','$state','$rootScope','$http','$location','$translate','rowSorter','uiGridConstants','SiteSrvc','Msg'];
+    function OrderManageCtrl($scope, $state, $rootScope, $http, $location, $translate, rowSorter, uiGridConstants,SiteSrvc,Msg) {
       var ctrl = this;
       ctrl.search = search;
       ctrl.reset = reset;
